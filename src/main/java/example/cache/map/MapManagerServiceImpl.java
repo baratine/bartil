@@ -76,7 +76,7 @@ public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
       int newTotal = total;
 
       map.delete(result.from((newCount, r) -> {
-        deleteSequentially(keys, index + 1, newTotal, newCount, r);
+        //deleteSequentially(keys, index + 1, newTotal, newCount, r);
       }));
     }
     else {
@@ -94,7 +94,7 @@ public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
     for (int i = 0; i < keys.length; i++) {
       MapService<K,V> map = manager.lookup("/" + keys[i]).as(MapService.class);
 
-      map.delete(results[i]);
+      //map.delete(results[i]);
     }
   }
 
