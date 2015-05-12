@@ -34,12 +34,14 @@ public class ListServiceImpl<T> implements ListService<T>
   @Override
   public void get(int index, Result<T> result)
   {
-    if (index < _list.size()) {
-      result.complete(_list.get(index));
+    if (_list == null) {
+      throw new NullPointerException("list is null");
     }
-    else {
-      result.complete(null);
+    else if (index >= _list.size()) {
+      throw new IndexOutOfBoundsException();
     }
+
+    result.complete(_list.get(index));
   }
 
   @Override
@@ -47,18 +49,20 @@ public class ListServiceImpl<T> implements ListService<T>
   {
     LinkedList<T> list = new LinkedList<>();
 
-    int i = 0;
-    for (T value : _list) {
-      int j = i++;
+    if (_list != null) {
+      int i = 0;
+      for (T value : getList()) {
+        int j = i++;
 
-      if (j < start) {
-        continue;
-      }
-      else if (j >= end) {
-        break;
-      }
-      else {
-        list.addLast(value);
+        if (j < start) {
+          continue;
+        }
+        else if (j >= end) {
+          break;
+        }
+        else {
+          list.addLast(value);
+        }
       }
     }
 
@@ -68,7 +72,13 @@ public class ListServiceImpl<T> implements ListService<T>
   @Override
   public void getAll(Result<List<T>> result)
   {
-    result.complete(_list);
+    LinkedList<T> list = new LinkedList<>();
+
+    if (_list != null) {
+      list.addAll(_list);
+    }
+
+    result.complete(list);
   }
 
   @Modify
@@ -76,9 +86,9 @@ public class ListServiceImpl<T> implements ListService<T>
   @SuppressWarnings("unchecked")
   public void pushHead(T value, Result<Integer> result)
   {
-    _list.addFirst(value);
+    getList().addFirst(value);
 
-    result.complete(_list.size());
+    result.complete(getList().size());
   }
 
   @Modify
@@ -86,9 +96,9 @@ public class ListServiceImpl<T> implements ListService<T>
   @SuppressWarnings("unchecked")
   public void pushTail(T value, Result<Integer> result)
   {
-    _list.addLast(value);
+    getList().addLast(value);
 
-    result.complete(_list.size());
+    result.complete(getList().size());
   }
 
   @Modify
@@ -97,10 +107,10 @@ public class ListServiceImpl<T> implements ListService<T>
   public void pushHeadMultiple(Result<Integer> result, T ... values)
   {
     for (T value : values) {
-      _list.addFirst(value);
+      getList().addFirst(value);
     }
 
-    result.complete(_list.size());
+    result.complete(getList().size());
   }
 
   @Modify
@@ -109,32 +119,32 @@ public class ListServiceImpl<T> implements ListService<T>
   public void pushTailMultiple(Result<Integer> result, T ... values)
   {
     for (T value : values) {
-      _list.addLast(value);
+      getList().addLast(value);
     }
 
-    result.complete(_list.size());
+    result.complete(getList().size());
   }
 
   @Modify
   @Override
   public void popHead(Result<T> result)
   {
-    result.complete(_list.pollFirst());
+    result.complete(getList().pollFirst());
   }
 
   @Modify
   @Override
   public void popTail(Result<T> result)
   {
-    result.complete(_list.pollLast());
+    result.complete(getList().pollLast());
   }
 
   @Modify
   @Override
   public void set(int index, T value, Result<Boolean> result)
   {
-    if (0 <= index && index < _list.size()) {
-      _list.set(index, value);
+    if (0 <= index && index < getList().size()) {
+      getList().set(index, value);
 
       result.complete(true);
     }
@@ -145,7 +155,22 @@ public class ListServiceImpl<T> implements ListService<T>
 
   @Modify
   @Override
-  public void remove(T value, int count, Result<Integer> result)
+  public void remove(int index, Result<Integer> result)
+  {
+    int removeCount = 0;
+
+    if (0 <= index && index <= getList().size()) {
+      getList().remove(index);
+
+      removeCount = 1;
+    }
+
+    result.complete(removeCount);
+  }
+
+  @Modify
+  @Override
+  public void removeValue(T value, int count, Result<Integer> result)
   {
     int removeCount = 0;
 
@@ -154,7 +179,7 @@ public class ListServiceImpl<T> implements ListService<T>
     }
 
     if (count > 0) {
-      Iterator<T> iter = _list.listIterator();
+      Iterator<T> iter = getList().listIterator();
 
       while (count > 0 && iter.hasNext()) {
         T node = iter.next();
@@ -168,7 +193,7 @@ public class ListServiceImpl<T> implements ListService<T>
       }
     }
     else {
-      Iterator<T> iter = _list.descendingIterator();
+      Iterator<T> iter = getList().descendingIterator();
 
       while (count < 0 && iter.hasNext()) {
         T node = iter.next();
@@ -190,33 +215,33 @@ public class ListServiceImpl<T> implements ListService<T>
   public void trim(int start, int end, Result<Integer> result)
   {
     if (start < 0) {
-      start += _list.size();
+      start += getList().size();
     }
 
     if (end < 0) {
-      end += _list.size();
+      end += getList().size();
     }
 
-    end = Math.min(end, _list.size());
+    end = Math.min(end, getList().size());
 
-    while (_list.size() > end) {
-      _list.removeLast();
+    while (getList().size() > end) {
+      getList().removeLast();
     }
 
-    while (start-- > 0) {
-      _list.removeFirst();
+    while (start-- > 0 && getList().size() > 0) {
+      getList().removeFirst();
     }
 
-    result.complete(_list.size());
+    result.complete(getList().size());
   }
 
   @Modify
   @Override
   public void clear(Result<Integer> result)
   {
-    int size = _list.size();
+    int size = getList().size();
 
-    _list.clear();
+    getList().clear();
 
     result.complete(size);
   }
@@ -224,7 +249,13 @@ public class ListServiceImpl<T> implements ListService<T>
   @Override
   public void size(Result<Integer> result)
   {
-    result.complete(_list.size());
+    int size = -1;
+
+    if (_list != null) {
+      size = _list.size();
+    }
+
+    result.complete(size);
   }
 
   @Modify
@@ -262,6 +293,7 @@ public class ListServiceImpl<T> implements ListService<T>
       _list = list;
     }
     else {
+      _list = null;
     }
 
     if (log.isLoggable(Level.FINE)) {
@@ -291,6 +323,14 @@ public class ListServiceImpl<T> implements ListService<T>
     if (log.isLoggable(Level.FINE)) {
       log.fine(getClass().getSimpleName() + ".onSave1: id=" + _id + " done");
     }
+  }
+  private LinkedList<T> getList()
+  {
+    if (_list == null) {
+      _list = new LinkedList<>();
+    }
+
+    return _list;
   }
 
   private Store<LinkedList<T>> getStore()

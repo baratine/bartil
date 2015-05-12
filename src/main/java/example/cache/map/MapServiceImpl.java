@@ -38,7 +38,11 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void get(K key, Result<V> result)
   {
-    V value = _map.get(key);
+    V value = null;
+
+    if (_map != null) {
+      value = _map.get(key);
+    }
 
     result.complete(value);
   }
@@ -46,12 +50,14 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void getKeys(Result<List<K>> result)
   {
-    ArrayList<K> list = new ArrayList<>(_map.size());
+    ArrayList<K> list = new ArrayList<>();
 
-    Set<K> keySet = _map.keySet();
+    if (_map != null) {
+      Set<K> keySet = _map.keySet();
 
-    for (K key : keySet) {
-      list.add(key);
+      for (K key : keySet) {
+        list.add(key);
+      }
     }
 
     result.complete(list);
@@ -60,12 +66,14 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void getValues(Result<List<V>> result)
   {
-    ArrayList<V> list = new ArrayList<>(_map.size());
+    ArrayList<V> list = new ArrayList<>();
 
-    Collection<V> valueSet = _map.values();
+    if (_map != null) {
+      Collection<V> valueSet = _map.values();
 
-    for (V value : valueSet) {
-      list.add(value);
+      for (V value : valueSet) {
+        list.add(value);
+      }
     }
 
     result.complete(list);
@@ -77,10 +85,14 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   {
     ArrayList<V> list = new ArrayList<>(keys.length);
 
-    for (K key : keys) {
-      V value = _map.get(key);
+    if (_map != null) {
+      for (K key : keys) {
+        if (_map.containsKey(key)) {
+          V value = _map.get(key);
 
-      list.add(value);
+          list.add(value);
+        }
+      }
     }
 
     result.complete(list);
@@ -89,55 +101,77 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void getAll(Result<Map<K,V>> result)
   {
-    result.complete(_map);
+    HashMap<K,V> map = new HashMap<K,V>();
+
+    if (_map != null) {
+      map.putAll(_map);
+    }
+
+    result.complete(map);
   }
 
   @Override
   public void containsKey(K key, Result<Boolean> result)
   {
-    result.complete(_map.containsKey(key));
+    boolean containsKey = false;
+
+    if (_map != null) {
+      containsKey = _map.containsKey(key);
+    }
+
+    result.complete(containsKey);
   }
 
   @Override
   public void containsValue(V value, Result<Boolean> result)
   {
-    result.complete(_map.containsValue(value));
+    boolean containsValue = false;
+
+    if (_map != null) {
+      containsValue = _map.containsValue(value);
+    }
+
+    result.complete(containsValue);
   }
 
   @Modify
   @Override
   public void put(K key, V value, Result<Integer> result)
   {
-    _map.put(key, value);
+    getMap().put(key, value);
 
-    result.complete(_map.size());
+    result.complete(getMap().size());
   }
 
   @Modify
   @Override
   public void putIfAbsent(K key, V value, Result<Boolean> result)
   {
-    int size = _map.size();
+    int size = getMap().size();
 
-    _map.putIfAbsent(key, value);
+    getMap().putIfAbsent(key, value);
 
-    result.complete(size != _map.size());
+    result.complete(size != getMap().size());
   }
 
   @Modify
   @Override
-  public void putMap(Map<K,V> map, Result<Boolean> result)
+  public void putMap(Map<K,V> map, Result<Integer> result)
   {
-    _map.putAll(map);
+    getMap().putAll(map);
 
-    result.complete(true);
+    result.complete(getMap().size());
   }
 
   @Modify
   @Override
   public void remove(K key, Result<Integer> result)
   {
-    V value = _map.remove(key);
+    V value = null;
+
+    if (_map != null) {
+      value = _map.remove(key);
+    }
 
     result.complete(value != null ? 1 : 0);
   }
@@ -149,11 +183,13 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   {
     int count = 0;
 
-    for (K key : keys) {
-      V value = _map.remove(key);
+    if (_map != null) {
+      for (K key : keys) {
+        V value = _map.remove(key);
 
-      if (value != null) {
-        count++;
+        if (value != null) {
+          count++;
+        }
       }
     }
 
@@ -164,26 +200,42 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void rename(K key, K newKey, Result<Boolean> result)
   {
-    V value = _map.remove(key);
+    boolean isRenamed = false;
 
-    _map.put(newKey, value);
+    if (_map != null && _map.containsKey(key)) {
+      V value = _map.remove(key);
 
-    result.complete(true);
+      _map.put(newKey, value);
+
+      isRenamed = true;
+    }
+
+    result.complete(isRenamed);
   }
 
   @Override
   public void size(Result<Integer> result)
   {
-    result.complete(_map.size());
+    int size = -1;
+
+    if (_map != null) {
+      size = _map.size();
+    }
+
+    result.complete(size);
   }
 
   @Modify
   @Override
   public void clear(Result<Integer> result)
   {
-    int size = _map.size();
+    int size = 0;
 
-    _map.clear();
+    if (_map != null) {
+      size = _map.size();
+
+      _map.clear();
+    }
 
     result.complete(size);
   }
@@ -192,11 +244,16 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void delete(Result<Boolean> result)
   {
-    _map.clear();
+    boolean isDeleted = false;
 
-    _map = null;
+    if (_map != null) {
+      isDeleted = true;
 
-    result.complete(true);
+      _map.clear();
+
+      _map = null;
+    }
+    result.complete(isDeleted);
   }
 
   @Override
@@ -221,7 +278,7 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
       _map = map;
     }
     else {
-      _map = new HashMap<K,V>();
+      _map = null;
     }
 
     if (log.isLoggable(Level.FINE)) {

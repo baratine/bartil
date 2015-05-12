@@ -22,7 +22,8 @@ public interface ListService<T>
 
   void set(int index, T value, Result<Boolean> result);
 
-  void remove(T value, int count, Result<Integer> result);
+  void remove(int index, Result<Integer> result);
+  void removeValue(T value, int count, Result<Integer> result);
 
   void trim(int start, int end, Result<Integer> result);
   void clear(Result<Integer> result);
