@@ -39,14 +39,14 @@ public class MapServiceTest
 
     MapServiceSync<String,String> service = lookup(id);
 
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
     Assert.assertEquals(null, service.get("foo"));
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
 
     restartBaratine();
 
     Assert.assertEquals(null, service.get("foo"));
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
   }
 
   @Test

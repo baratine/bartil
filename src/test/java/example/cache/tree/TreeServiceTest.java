@@ -36,13 +36,13 @@ public class TreeServiceTest
     String id = "" + _count.getAndIncrement();
     TreeServiceSync<String,Integer> service = lookup(id);
 
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
     Assert.assertEquals(false, service.exists());
     Assert.assertEquals(null, service.get("aaa"));
 
     restartBaratine();
 
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
     Assert.assertEquals(false, service.exists());
     Assert.assertEquals(null, service.get("aaa"));
   }

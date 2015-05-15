@@ -216,7 +216,7 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void size(Result<Integer> result)
   {
-    int size = -1;
+    int size = 0;
 
     if (_map != null) {
       size = _map.size();

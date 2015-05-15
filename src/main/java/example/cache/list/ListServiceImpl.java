@@ -249,7 +249,7 @@ public class ListServiceImpl<T> implements ListService<T>
   @Override
   public void size(Result<Integer> result)
   {
-    int size = -1;
+    int size = 0;
 
     if (_list != null) {
       size = _list.size();

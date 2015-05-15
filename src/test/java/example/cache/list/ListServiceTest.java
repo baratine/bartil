@@ -36,7 +36,7 @@ public class ListServiceTest
     String id = "" + _count.getAndIncrement();
     ListServiceSync<String> service = lookup(id);
 
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
 
     Assert.assertEquals(1, service.pushHead("aaa"));
     Assert.assertEquals(2, service.pushHead("bbb"));
@@ -477,7 +477,7 @@ public class ListServiceTest
     String id = "" + _count.getAndIncrement();
     ListServiceSync<String> service = lookup(id);
 
-    Assert.assertEquals(-1, service.size());
+    Assert.assertEquals(0, service.size());
 
     try {
       Assert.assertEquals(null, service.get(5));
