@@ -18,12 +18,9 @@ public class StringManagerServiceImpl implements StringManagerService
   @OnLookup
   public StringServiceImpl onLookup(String url)
   {
-    int i = url.indexOf('/', 0);
-    String id = url.substring(i + 1);
+    String storeKey = "/" + url + "/string";
 
-    String storeKey = "/" + id + "/string";
-
-    StringServiceImpl counter = new StringServiceImpl(id, storeKey, _store);
+    StringServiceImpl counter = new StringServiceImpl(url, storeKey, _store);
 
     return counter;
   }

@@ -20,12 +20,9 @@ public class TreeManagerServiceImpl<K,V> implements TreeManagerService<K,V>
   @OnLookup
   public TreeServiceImpl<K,V> onLookup(String url)
   {
-    int i = url.lastIndexOf('/');
-    String id = url.substring(i + 1);
+    String storeKey = "/" + url + "/score";
 
-    String storeKey = "/" + id + "/score";
-
-    TreeServiceImpl<K,V> score = new TreeServiceImpl<K,V>(id, storeKey, _store);
+    TreeServiceImpl<K,V> score = new TreeServiceImpl<K,V>(url, storeKey, _store);
 
     return score;
   }

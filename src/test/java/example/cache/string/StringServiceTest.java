@@ -77,6 +77,21 @@ public class StringServiceTest
 
     Assert.assertEquals(false, service.exists());
   }
+  
+  @Test
+  public void testLookup()
+  {
+    String id0 = "foo/bar:" + _count.getAndIncrement();
+    StringServiceSync service0 = lookup(id0);
+    service0.set("aaa");
+    
+    String id1 = "foo/bar:" + _count.getAndIncrement();
+    StringServiceSync service1 = lookup(id1);
+    service1.set("bbb");
+
+    Assert.assertEquals("aaa", service0.get());
+    Assert.assertEquals("bbb", service1.get());
+  }
 
   private StringServiceSync lookup(String id)
   {

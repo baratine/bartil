@@ -506,6 +506,22 @@ public class ListServiceTest
     }
   }
 
+  @Test
+  public void testLookup()
+  {
+    String id0 = "foo/bar:" + _count.getAndIncrement();
+    ListServiceSync<String> service0 = lookup(id0);
+    service0.pushHead("aaa");
+    
+    String id1 = "foo/bar:" + _count.getAndIncrement();
+    ListServiceSync<String> service1 = lookup(id1);
+    service1.pushHead("bbb");
+    service1.pushHead("ccc");
+    
+    Assert.assertEquals(1, service0.size());
+    Assert.assertEquals(2, service1.size());
+  }
+  
   private void restartBaratine()
   {
     //_testContext.closeImmediate();

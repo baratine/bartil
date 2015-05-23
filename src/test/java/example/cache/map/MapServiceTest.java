@@ -388,6 +388,22 @@ public class MapServiceTest
 
     Assert.assertEquals(true, service.exists());
   }
+  
+  @Test
+  public void testLookup()
+  {
+    String id0 = "foo/bar:" + _count.getAndIncrement();
+    MapServiceSync<String,String> service0 = lookup(id0);
+    service0.put("aaa", "111");
+    
+    String id1 = "foo/bar:" + _count.getAndIncrement();
+    MapServiceSync<String,String> service1 = lookup(id1);
+    service1.put("bbb", "222");
+    service1.put("ccc", "333");
+    
+    Assert.assertEquals(1, service0.size());
+    Assert.assertEquals(2, service1.size());
+  }
 
   @Test
   public void testDelete()

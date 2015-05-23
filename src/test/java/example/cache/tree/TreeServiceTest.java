@@ -16,6 +16,8 @@ import org.junit.runner.RunWith;
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;
 
+import example.cache.string.StringServiceSync;
+
 @RunWith(RunnerBaratine.class)
 @ConfigurationBaratine(services = {TreeManagerServiceImpl.class}, pod = "mypod",
   logs = {@ConfigurationBaratine.Log(name = "com.caucho", level = "WARNING"),
@@ -527,6 +529,22 @@ public class TreeServiceTest
     restartBaratine();
 
     Assert.assertEquals(false, service.exists());
+  }
+  
+  @Test
+  public void testLookup()
+  {
+    String id0 = "foo/bar:" + _count.getAndIncrement();
+    TreeServiceSync<String,Integer> service0 = lookup(id0);
+    service0.put("aaa", 111);
+    
+    String id1 = "foo/bar:" + _count.getAndIncrement();
+    TreeServiceSync<String,Integer> service1 = lookup(id1);
+    service1.put("bbb", 222);
+    service1.put("ccc", 333);
+
+    Assert.assertEquals(1, service0.size());
+    Assert.assertEquals(2, service1.size());
   }
 
   private TreeServiceSync<String,Integer> lookup(String id)

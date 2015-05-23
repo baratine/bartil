@@ -20,12 +20,9 @@ public class ListManagerServiceImpl<T> implements ListManagerService
   @OnLookup
   public ListServiceImpl<T> onLookup(String url)
   {
-    int i = url.indexOf('/', 0);
-    String id = url.substring(i + 1);
+    String storeKey = url + "/list";
 
-    String storeKey = "/" + id + "/list";
-
-    ListServiceImpl<T> list = new ListServiceImpl<T>(id, storeKey, _store);
+    ListServiceImpl<T> list = new ListServiceImpl<T>(url, storeKey, _store);
 
     return list;
   }

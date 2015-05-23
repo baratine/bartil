@@ -101,12 +101,9 @@ public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
   @OnLookup
   public MapServiceImpl<K,V> onLookup(String url)
   {
-    int i = url.lastIndexOf('/');
-    String id = url.substring(i + 1);
+    String storeKey = url + "/map";
 
-    String storeKey = "/" + i + "/map";
-
-    MapServiceImpl<K,V> map = new MapServiceImpl<K,V>(id, storeKey, _store);
+    MapServiceImpl<K,V> map = new MapServiceImpl<K,V>(url, storeKey, _store);
 
     return map;
   }
