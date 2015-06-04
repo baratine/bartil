@@ -4,8 +4,8 @@ from any client supporting WebSockets or HTTP.  You can store any object as
 both the key or value field in the map, list, and tree data types.
 
 In many ways, Bache is very similar to [Redis](http://redis.io/) and Bache
-services should be familiar to Redis users.  Baratine is used to show
-that you can write any kind of service that runs about as fast as Redis, but
+services should be familiar to Redis users.  Bache is used to show
+that you can write any kind of Baratine service that runs about as fast as Redis, but
 with much more functionality (and without having to resort to scripting, as is
 the case with Redis).
 
