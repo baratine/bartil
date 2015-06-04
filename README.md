@@ -1,5 +1,5 @@
 Bache is a Baratine service that exposes common data structures as a service.
-Bache provides a map, list, tree, string, and counter types that are callable
+Bache provides a map, list, tree, string, and counter type that are callable
 from any client supporting WebSockets or HTTP.  You can store any object as
 both the key or value field in the map, list, and tree data types.
 
@@ -24,6 +24,7 @@ pod):
 
 Java
 ------
+    import io.baratine.core.ResultFuture;
     import com.caucho.amp.hamp;
     import example.cache.map.MapService;
 
@@ -38,7 +39,7 @@ Java
     System.out.println("new size is: " + sizeFuture.get());
     
     map.get("foo", valueFuture);
-    System.out.println("value is: " + value);
+    System.out.println("value is: " + valueFuture.get());
 
 PHP
 -------
