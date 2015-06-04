@@ -39,6 +39,8 @@ Java
       System.out.println("new size is: " + size);
     });
     
+    Thread.sleep(2000);
+    
     // calling it synchronously
     map.get("foo", valueFuture);
     System.out.println("value is: " + valueFuture.get());
