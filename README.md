@@ -11,7 +11,7 @@ the case with Redis).
 
 Usage
 ==========
-Bache provices the following services:
+Bache provides the following services:
 
 * [/map](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/map/MapService.java)
 * [/list](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/list/ListService.java)
