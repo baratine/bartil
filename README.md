@@ -32,12 +32,14 @@ Java
     
     MapService<String,String> service = client.lookup("/map/123").as(MapService.class);
     
-    ResultFuture<Integer> sizeFuture = new ResultFuture<>();
     ResultFuture<String> valueFuture = new ResultFuture<>();
+
+    // calling it asynchronously    
+    map.put("foo", "aaa", /* int */ size -> {
+      System.out.println("new size is: " + size);
+    });
     
-    map.put("foo", "aaa", sizeFuture);
-    System.out.println("new size is: " + sizeFuture.get());
-    
+    // calling it synchronously
     map.get("foo", valueFuture);
     System.out.println("value is: " + valueFuture.get());
 
