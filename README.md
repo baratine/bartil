@@ -13,11 +13,11 @@ Usage
 ==========
 Bache provides the following services:
 
-* [/map](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/map/MapService.java)
-* [/list](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/list/ListService.java)
-* [/tree](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/tree/TreeService.java)
-* [/string](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/string/StringService.java)
-* [/counter](https://github.com/baratine/bache/blob/master/src/main/java/example/cache/counter/CounterService.java)
+* [/map](https://github.com/baratine/bache/blob/master/src/main/java/bache/map/MapService.java)
+* [/list](https://github.com/baratine/bache/blob/master/src/main/java/bache/list/ListService.java)
+* [/tree](https://github.com/baratine/bache/blob/master/src/main/java/bache/tree/TreeService.java)
+* [/string](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringService.java)
+* [/counter](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterService.java)
 
 To call the /map service for example (assuming you deployed it to the default 
 pod):
@@ -26,7 +26,7 @@ Java
 ------
     import io.baratine.core.ResultFuture;
     import com.caucho.amp.hamp;
-    import example.cache.map.MapService;
+    import bache.map.MapService;
 
     ClientHamp client = new ClientHamp("http://localhost:8085/s/pod";
     
