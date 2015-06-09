@@ -187,7 +187,7 @@ implementing `@OnLoad` and `@OnSave`:
 The state of the service is persisted to the  `io.baratine.core.Store`.  `@OnLoad` is called when:
 
 1. the service instance is being instantiated for the first time, or
-2. the service instance has been unloaded and saved, and needs to be loaded back into memory, or
+2. the service instance has been unloaded and saved, and needs to be loaded back into memory
 
 `@OnSave` is called if any `@Modify` methods have been called at least once and:
 
