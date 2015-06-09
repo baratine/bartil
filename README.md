@@ -94,11 +94,18 @@ were replaced with:
 
     lookupList("/list/timeline")->pushHead($postid);
     lookupList("/list/timeline")->trim(0,1000);
+    
+where `lookupList()` uses baratine/modules/baratine-php client library as follows:
 
-In Bache, `/list` is the parent service is '/list/timeline' is a child service
-that shares the parent's inbox.  A call to /list/timeline's pushHead() would entail:
+    function lookupList(/* string */ $url)
+    {
+      return getBaratineClient()->_lookup($url)->_as('\baratine\cache\ListService');
+    }
+
+In Bache, `/list` is the parent service and `/list/timeline` is a child service
+that shares the parent's inbox.  A call to pushHead() would entail:
 
 1. call into ListServiceManagerImpl's `@OnLookup` annotated method
 2. `@OnLookup` returns the child instance that would handle the request, which
   in this case is ListServiceImpl
-3. Baratine calls ListServiceImpl.push() method
+3. Baratine calls `ListServiceImpl.pushHead()` method
