@@ -74,3 +74,31 @@ PHP
     $map->doesNotExist(123, 456);
 
 The directory `baratine-php/` is located within the baratine directory `baratine/modules/`
+
+
+Bartwit Example Application
+===========================
+[Bartwit](https://github.com/baratine/bartwit) is a fork of
+[Retwis](http://redis.io/topics/twitter-clone) that uses Bache in lieu of Redis.
+It serves to demonstrate that:
+
+1. Bache can easily replace Redis, and that
+2. you can use Bache/Baratine as your primary datastore instead of a traditional SQL database
+
+Redis commands in Retwis like:
+
+    $r->lpush("timeline",$postid);
+    $r->ltrim("timeline",0,1000);
+
+were replaced with:
+
+    lookupList("/list/timeline")->pushHead($postid);
+    lookupList("/list/timeline")->trim(0,1000);
+
+In Bache, `/list` is the parent service is '/list/timeline' is a child service
+that shares the parent's inbox.  A call to /list/timeline's pushHead() would entail:
+
+1. call into ListServiceManagerImpl's `@OnLookup` annotated method
+2. `@OnLookup` returns the child instance that would handle the request, which
+  in this case is ListServiceImpl
+3. Baratine calls ListServiceImpl.push() method
