@@ -1,6 +1,8 @@
-package example.cache.counter;
+package bache.counter;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import bache.counter.CounterManagerServiceImpl;
 
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;

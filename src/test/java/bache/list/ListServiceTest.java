@@ -1,5 +1,6 @@
-package example.cache.list;
+package bache.list;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,6 +13,8 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import bache.list.ListManagerServiceImpl;
 
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;
@@ -512,16 +515,33 @@ public class ListServiceTest
     String id0 = "foo/bar:" + _count.getAndIncrement();
     ListServiceSync<String> service0 = lookup(id0);
     service0.pushHead("aaa");
-    
+
     String id1 = "foo/bar:" + _count.getAndIncrement();
     ListServiceSync<String> service1 = lookup(id1);
     service1.pushHead("bbb");
     service1.pushHead("ccc");
-    
+
     Assert.assertEquals(1, service0.size());
     Assert.assertEquals(2, service1.size());
   }
-  
+
+  @Test
+  public void testStream()
+  {
+    String id = "" + _count.getAndIncrement();
+    ListServiceSync<String> service = lookup(id);
+
+    service.pushTailMultiple("aaa", "bbb", "ccc", "ddd", "eee", "fff");
+
+    Iterable<String> iterable = service.stream(2, 4).iter();
+    Iterator<String> iter = iterable.iterator();
+
+    Assert.assertEquals("ccc", iter.next());
+    Assert.assertEquals("ddd", iter.next());
+
+    Assert.assertEquals(false, iter.hasNext());
+  }
+
   private void restartBaratine()
   {
     //_testContext.closeImmediate();

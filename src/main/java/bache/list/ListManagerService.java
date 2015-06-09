@@ -1,4 +1,4 @@
-package example.cache.list;
+package bache.list;
 
 public interface ListManagerService
 {

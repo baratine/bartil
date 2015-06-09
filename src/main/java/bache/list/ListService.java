@@ -1,8 +1,9 @@
-package example.cache.list;
+package bache.list;
 
 import java.util.List;
 
 import io.baratine.core.Result;
+import io.baratine.stream.StreamBuilder;
 
 public interface ListService<T>
 {
@@ -31,4 +32,6 @@ public interface ListService<T>
 
   void delete(Result<Boolean> result);
   void exists(Result<Boolean> result);
+
+  StreamBuilder<T> stream(int start, int end);
 }

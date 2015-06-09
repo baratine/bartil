@@ -1,4 +1,4 @@
-package example.cache.counter;
+package bache.counter;
 
 import javax.inject.Inject;
 

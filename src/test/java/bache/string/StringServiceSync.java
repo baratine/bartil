@@ -1,4 +1,4 @@
-package example.cache.string;
+package bache.string;
 
 public interface StringServiceSync
 {

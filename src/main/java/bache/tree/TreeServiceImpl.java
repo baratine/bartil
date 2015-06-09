@@ -1,4 +1,4 @@
-package example.cache.tree;
+package bache.tree;
 
 import java.util.HashMap;
 import java.util.LinkedList;

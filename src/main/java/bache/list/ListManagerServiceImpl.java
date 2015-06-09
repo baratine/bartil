@@ -1,4 +1,4 @@
-package example.cache.list;
+package bache.list;
 
 import io.baratine.core.Journal;
 import io.baratine.core.OnLookup;

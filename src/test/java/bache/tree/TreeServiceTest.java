@@ -1,4 +1,4 @@
-package example.cache.tree;
+package bache.tree;
 
 import java.util.List;
 import java.util.Map;
@@ -13,10 +13,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import bache.string.StringServiceSync;
+import bache.tree.TreeManagerServiceImpl;
+
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;
-
-import example.cache.string.StringServiceSync;
 
 @RunWith(RunnerBaratine.class)
 @ConfigurationBaratine(services = {TreeManagerServiceImpl.class}, pod = "mypod",

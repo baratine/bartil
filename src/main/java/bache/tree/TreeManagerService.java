@@ -1,4 +1,4 @@
-package example.cache.tree;
+package bache.tree;
 
 public interface TreeManagerService<K,V>
 {

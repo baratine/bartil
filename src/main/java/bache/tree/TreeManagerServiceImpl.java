@@ -1,4 +1,4 @@
-package example.cache.tree;
+package bache.tree;
 
 import io.baratine.core.Journal;
 import io.baratine.core.OnLookup;

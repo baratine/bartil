@@ -1,4 +1,4 @@
-package example.cache.string;
+package bache.string;
 
 import javax.inject.Inject;
 

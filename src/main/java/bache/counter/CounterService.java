@@ -1,4 +1,4 @@
-package example.cache.counter;
+package bache.counter;
 
 import io.baratine.core.Result;
 

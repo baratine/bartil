@@ -1,4 +1,4 @@
-package example.cache.map;
+package bache.map;
 
 import java.util.List;
 import java.util.function.Function;

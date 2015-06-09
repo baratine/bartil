@@ -1,4 +1,4 @@
-package example.cache.list;
+package bache.list;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,7 +10,9 @@ import io.baratine.core.Modify;
 import io.baratine.core.OnLoad;
 import io.baratine.core.OnSave;
 import io.baratine.core.Result;
+import io.baratine.core.ResultSink;
 import io.baratine.store.Store;
+import io.baratine.stream.StreamBuilder;
 
 public class ListServiceImpl<T> implements ListService<T>
 {
@@ -277,6 +279,33 @@ public class ListServiceImpl<T> implements ListService<T>
     result.complete(_list != null);
   }
 
+  @Override
+  public StreamBuilder<T> stream(int offset, int length)
+  {
+    throw new IllegalStateException();
+  }
+
+  public void stream(ResultSink<T> sink, int start, int end)
+  {
+    end = Math.min(end, _list.size());
+
+    int i = 0;
+    for (T value : _list) {
+      if (i < start) {
+      }
+      else if (i >= end) {
+        break;
+      }
+      else {
+        sink.accept(value);
+      }
+
+      i++;
+    }
+
+    sink.end();
+  }
+
   @OnLoad
   public void onLoad(Result<Boolean> result)
   {
@@ -324,6 +353,7 @@ public class ListServiceImpl<T> implements ListService<T>
       log.fine(getClass().getSimpleName() + ".onSave1: id=" + _id + " done");
     }
   }
+
   private LinkedList<T> getList()
   {
     if (_list == null) {

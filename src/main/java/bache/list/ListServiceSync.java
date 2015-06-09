@@ -1,4 +1,6 @@
-package example.cache.list;
+package bache.list;
+
+import io.baratine.stream.StreamBuilder;
 
 import java.util.List;
 
@@ -29,4 +31,6 @@ public interface ListServiceSync<T>
 
   boolean delete();
   boolean exists();
+
+  StreamBuilder<T> stream(int offset, int length);
 }

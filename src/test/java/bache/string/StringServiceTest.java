@@ -1,6 +1,8 @@
-package example.cache.string;
+package bache.string;
 
 import java.util.concurrent.atomic.AtomicInteger;
+
+import bache.string.StringManagerServiceImpl;
 
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;

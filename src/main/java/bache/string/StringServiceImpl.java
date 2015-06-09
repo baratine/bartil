@@ -1,4 +1,4 @@
-package example.cache.string;
+package bache.string;
 
 import io.baratine.core.Modify;
 import io.baratine.core.OnLoad;
