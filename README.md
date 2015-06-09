@@ -103,9 +103,8 @@ where `lookupList()` uses baratine/modules/baratine-php client library as follow
     }
 
 In Bache, `/list` is the parent service and `/list/timeline` is a child service
-that shares the parent's inbox.  A call to pushHead() would entail:
+that shares the parent's inbox.  A call to pushHead() would:
 
-1. call into ListServiceManagerImpl's `@OnLookup` annotated method
-2. `@OnLookup` returns the child instance that would handle the request, which
-  in this case is ListServiceImpl
-3. Baratine calls `ListServiceImpl.pushHead()` method
+1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
+2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
+3. Baratine calls the `ListServiceImpl.pushHead()` method
