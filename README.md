@@ -95,7 +95,7 @@ were replaced with:
     lookupList("/list/timeline")->pushHead($postid);
     lookupList("/list/timeline")->trim(0,1000);
     
-where `lookupList()` uses baratine/modules/baratine-php client library as follows:
+where `lookupList()` uses the `baratine/modules/baratine-php` client library as follows:
 
     function lookupList(/* string */ $url)
     {
