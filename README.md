@@ -25,8 +25,9 @@ pod):
 Java
 ------
     import io.baratine.core.ResultFuture;
-    import com.caucho.amp.hamp;
+    import com.caucho.amp.hamp.ClientHamp;
     import bache.map.MapService;
+    import bache.map.MapServiceSync;
 
     ClientHamp client = new ClientHamp("http://localhost:8085/s/pod";
     
@@ -71,3 +72,5 @@ PHP
     
     // an exception is thrown because doesNotExist() does not exist in your MapService.php class
     $map->doesNotExist(123, 456);
+
+The directory `baratine-php/` is located within the baratine directory `baratine/modules/`
