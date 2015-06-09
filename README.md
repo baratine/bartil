@@ -108,3 +108,90 @@ that shares the parent's inbox.  A call to pushHead() would:
 1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
 2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
 3. Baratine calls the `ListServiceImpl.pushHead()` method
+
+How is Bache Implemented
+========================
+Bache data structures are each a journaled `@Service`:
+
+    @Journal
+    @Service("/list")
+    public class ListServiceManagerImpl
+    
+    @Journal
+    @Service("/map")
+    public class MapServiceManagerImpl
+    
+    @Journal
+    @Service("/tree")
+    public class TreeServiceManagerImpl
+    
+    @Journal
+    @Service("/counter")
+    public class CounterServiceManagerImpl
+    
+In Baratine, a service needs to implement `@OnLookup` if it wants to handle child URLs
+(e.g. `/list` is the parent and `/list/foo123` is the child).  Otherwise, the caller would get a service-not-found exception.
+
+For `ListServiceManagerImpl`, it's `@OnLookup` simply returns a `ListServiceImpl` instance.  Baratine will cache that
+instance in an LRU and perform lifecycle operations as needed.  `ListServiceImpl` participates in the lifecycle operations by
+implementing `@OnLoad` and `@OnSave`:
+
+    @OnLoad
+    public void onLoad(Result<Boolean> result)
+    {
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(getClass().getSimpleName() + ".onLoad0: id=" + _id);
+      }
+
+      getStore().get(_storeKey, result.from(v->onLoadComplete(v)));
+    }
+
+    private boolean onLoadComplete(LinkedList<T> list)
+    {
+      if (list != null) {
+        _list = list;
+      }
+      else {
+        _list = null;
+      }
+
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(getClass().getSimpleName() + ".onLoad1: id=" + _id + " done, list=" + list);
+      }
+
+      return true;
+    }
+
+    @OnSave
+    public void onSave(Result<Boolean> result)
+    {
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(getClass().getSimpleName() + ".onSave0: id=" + _id + ", list=" + _list);
+      }
+
+      if (_list != null) {
+        getStore().put(_storeKey, _list);
+      }
+      else {
+        // then is deleted
+        getStore().remove(_storeKey);
+      }
+
+      result.complete(true);
+
+      if (log.isLoggable(Level.FINE)) {
+        log.fine(getClass().getSimpleName() + ".onSave1: id=" + _id + " done");
+      }
+    }
+
+The state of the service is persisted to the  `io.baratine.core.Store`.  `@OnLoad` is called when:
+
+1. the service instance is being instantiated for the first time, or
+2. the service instance has been unloaded and saved, and needs to be loaded back into memory, or
+
+`@OnSave` is called if any `@Modify` methods have been called at least once and:
+
+1. the journal is going to be flushed and the service instance needs to save its state, or
+2. the service is shutting down, or
+3. someone requested a save with a call to this service's `io.baratine.core.ServiceRef.save()`
+
