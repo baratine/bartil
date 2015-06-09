@@ -30,10 +30,8 @@ Java
 
     ClientHamp client = new ClientHamp("http://localhost:8085/s/pod";
     
-    MapService<String,String> service = client.lookup("/map/123").as(MapService.class);
+    MapService<String,String> map = client.lookup("/map/123").as(MapService.class);
     
-    ResultFuture<String> valueFuture = new ResultFuture<>();
-
     // calling it asynchronously    
     map.put("foo", "aaa", /* int */ size -> {
       System.out.println("new size is: " + size);
@@ -42,8 +40,14 @@ Java
     Thread.sleep(2000);
     
     // calling it synchronously
+    ResultFuture<String> valueFuture = new ResultFuture<>();
+    
     map.get("foo", valueFuture);
     System.out.println("value is: " + valueFuture.get());
+    
+    // or calling it synchornously using a synchronous Java interface
+    MapServiceSync<String,String> mapSync = client.lookup("/map/123").as(MapServiceSync.class);
+    System.out.println("value is: " + map.get("foo"));
 
 PHP
 -------
