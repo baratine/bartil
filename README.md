@@ -45,7 +45,7 @@ Java
     map.get("foo", valueFuture);
     System.out.println("value is: " + valueFuture.get());
     
-    // or calling it synchornously using a synchronous Java interface
+    // or calling it synchronously using a synchronous Java interface
     MapServiceSync<String,String> mapSync = client.lookup("/map/123").as(MapServiceSync.class);
     System.out.println("value is: " + map.get("foo"));
 
