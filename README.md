@@ -73,7 +73,7 @@ PHP
     // an exception is thrown because doesNotExist() does not exist in your MapService.php class
     $map->doesNotExist(123, 456);
 
-The directory `baratine-php/` is located within the baratine directory `baratine/modules/`
+The directory `baratine-php/` is located within the Baratine distribution directory `baratine/modules/`
 
 
 Bartwit Example Application
@@ -108,6 +108,18 @@ that shares the parent's inbox.  A call to pushHead() would:
 1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
 2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
 3. Baratine calls the `ListServiceImpl.pushHead()` method
+
+Bartwit vs Retwis Benchmark
+---------------------------
+For similar number of users and posts, Bartwit is very close to Retwis in performance when benchmarking `timeline.php`:
+
+Bartwit: 1 client **1140** requests/sec, 64 clients **2790** requests/sec
+
+Retwis: 1 client **1160** requests/sec, 64 clients **3570** requests/sec
+
+Bartwit shows that for a real world application, Bache (and in turn Baratine) performs very competitively with Redis.  But
+Bache is much more extensible because it is just Java code packaged within a jar file; you can easily extend Bache with
+functionality that better suits your specific application.
 
 How is Bache Implemented
 ========================
