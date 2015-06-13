@@ -111,15 +111,15 @@ that shares the parent's inbox.  A call to pushHead() would:
 
 Bartwit vs Retwis Benchmark
 ---------------------------
-For similar number of users and posts, Bartwit is very close to Retwis in performance when benchmarking `timeline.php`:
+For the same number of users and posts on `timeline.php`:
 
 Bartwit: 1 client **1140** requests/sec, 64 clients **2790** requests/sec
 
 Retwis: 1 client **1160** requests/sec, 64 clients **3570** requests/sec
 
-Bartwit shows that for a real world application, Bache (and in turn Baratine) performs very competitively with Redis.  But
-Bache is much more extensible because it is just Java code packaged within a jar file; you can easily extend Bache with
-functionality that better suits your specific application.
+Bartwit shows that for a real world application, Bache (and in turn Baratine) performs very competitively versus Redis. 
+The big difference is that Bache is just Java code packaged within a jar file; you can easily extend Bache
+with bespoke functionality that better suits your specific application.
 
 How is Bache Implemented
 ========================
@@ -196,7 +196,7 @@ implementing `@OnLoad` and `@OnSave`:
       }
     }
 
-The state of the service is persisted to the  `io.baratine.core.Store`.  `@OnLoad` is called when:
+The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is called when:
 
 1. the service instance is being instantiated for the first time, or
 2. the service instance has been unloaded and saved, and needs to be loaded back into memory
