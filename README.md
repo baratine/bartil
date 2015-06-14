@@ -176,10 +176,6 @@ implementing `@OnLoad` and `@OnSave`:
     @OnLoad
     public void onLoad(Result<Boolean> result)
     {
-      if (log.isLoggable(Level.FINE)) {
-        log.fine(getClass().getSimpleName() + ".onLoad0: id=" + _id);
-      }
-
       getStore().get(_storeKey, result.from(v->onLoadComplete(v)));
     }
 
@@ -192,20 +188,12 @@ implementing `@OnLoad` and `@OnSave`:
         _list = null;
       }
 
-      if (log.isLoggable(Level.FINE)) {
-        log.fine(getClass().getSimpleName() + ".onLoad1: id=" + _id + " done, list=" + list);
-      }
-
       return true;
     }
 
     @OnSave
     public void onSave(Result<Boolean> result)
     {
-      if (log.isLoggable(Level.FINE)) {
-        log.fine(getClass().getSimpleName() + ".onSave0: id=" + _id + ", list=" + _list);
-      }
-
       if (_list != null) {
         getStore().put(_storeKey, _list);
       }
@@ -215,10 +203,6 @@ implementing `@OnLoad` and `@OnSave`:
       }
 
       result.complete(true);
-
-      if (log.isLoggable(Level.FINE)) {
-        log.fine(getClass().getSimpleName() + ".onSave1: id=" + _id + " done");
-      }
     }
 ```
 
