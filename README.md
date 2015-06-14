@@ -19,8 +19,7 @@ Bache provides the following services:
 * [/string](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringService.java)
 * [/counter](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterService.java)
 
-To call the /map service for example (assuming you deployed it to the default 
-pod):
+To call the /map service for example (assuming you deployed it to the default pod):
 
 Java
 ------
@@ -49,6 +48,18 @@ Java
     // or calling it synchronously using a synchronous Java interface
     MapServiceSync<String,String> mapSync = client.lookup("/map/123").as(MapServiceSync.class);
     System.out.println("value is: " + map.get("foo"));
+
+When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do all the magic marshalling arguments back and forth.  Bache provides both asynchronous (e.g. MapService) and synchronous
+(e.g. MapServiceSync) interfaces for its services.
+
+URL         | Async API     | Sync API
+------------|---------------|---------
+/map        | [MapService](https://github.com/baratine/bache/blob/master/src/main/java/bache/map/MapService.java) | [MapServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/map/MapServiceSync.java)
+/list        | [ListService](https://github.com/baratine/bache/blob/master/src/main/java/bache/list/ListService.java) | [ListServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/list/ListServiceSync.java)
+/tree        | [TreeService](https://github.com/baratine/bache/blob/master/src/main/java/bache/tree/TreeService.java) | [TreeServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/tree/TreeServiceSync.java)
+/string        | [StringService](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringService.java) | [StringServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringServiceSync.java)
+/counter        | [CounterService](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterService.java) | [CounterServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterServiceSync.java)
+
 
 PHP
 -------
@@ -103,11 +114,11 @@ where `lookupList()` uses the `baratine/modules/baratine-php` client library as 
     }
 
 In Bache, `/list` is the parent service and `/list/timeline` is a child service
-that shares the parent's inbox.  A call to pushHead() would:
+that shares the parent's inbox.  A call to `pushHead()` would:
 
 1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
 2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
-3. Baratine calls the `ListServiceImpl.pushHead()` method
+3. finally Baratine calls the `ListServiceImpl.pushHead()` method
 
 Bartwit vs Retwis Benchmark
 ---------------------------
