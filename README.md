@@ -13,11 +13,11 @@ Usage
 ==========
 Bache provides the following services:
 
-* [/map](https://github.com/baratine/bache/blob/master/src/main/java/bache/map/MapService.java)
-* [/list](https://github.com/baratine/bache/blob/master/src/main/java/bache/list/ListService.java)
-* [/tree](https://github.com/baratine/bache/blob/master/src/main/java/bache/tree/TreeService.java)
-* [/string](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringService.java)
-* [/counter](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterService.java)
+* [/map](src/main/java/bache/map/MapService.java)
+* [/list](src/main/java/bache/list/ListService.java)
+* [/tree](src/main/java/bache/tree/TreeService.java)
+* [/string](src/main/java/bache/string/StringService.java)
+* [/counter](src/main/java/bache/counter/CounterService.java)
 
 To call the /map service for example (assuming you deployed it to the default pod):
 
@@ -54,11 +54,11 @@ When you do a lookup(), you may cast the proxy to whatever interface class you w
 
 URL         | Async API     | Sync API
 ------------|---------------|---------
-/map        | [MapService](https://github.com/baratine/bache/blob/master/src/main/java/bache/map/MapService.java) | [MapServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/map/MapServiceSync.java)
-/list        | [ListService](https://github.com/baratine/bache/blob/master/src/main/java/bache/list/ListService.java) | [ListServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/list/ListServiceSync.java)
-/tree        | [TreeService](https://github.com/baratine/bache/blob/master/src/main/java/bache/tree/TreeService.java) | [TreeServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/tree/TreeServiceSync.java)
-/string        | [StringService](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringService.java) | [StringServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/string/StringServiceSync.java)
-/counter        | [CounterService](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterService.java) | [CounterServiceSync](https://github.com/baratine/bache/blob/master/src/main/java/bache/counter/CounterServiceSync.java)
+/map        | [MapService](src/main/java/bache/map/MapService.java) | [MapServiceSync](src/main/java/bache/map/MapServiceSync.java)
+/list        | [ListService](src/main/java/bache/list/ListService.java) | [ListServiceSync](src/main/java/bache/list/ListServiceSync.java)
+/tree        | [TreeService](src/main/java/bache/tree/TreeService.java) | [TreeServiceSync](src/main/java/bache/tree/TreeServiceSync.java)
+/string        | [StringService](src/main/java/bache/string/StringService.java) | [StringServiceSync](src/main/java/bache/string/StringServiceSync.java)
+/counter        | [CounterService](src/main/java/bache/counter/CounterService.java) | [CounterServiceSync](src/main/java/bache/counter/CounterServiceSync.java)
 
 
 PHP
