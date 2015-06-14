@@ -23,6 +23,7 @@ To call the /map service for example (assuming you deployed it to the default po
 
 Java
 ------
+```java
     import io.baratine.core.ResultFuture;
     import com.caucho.amp.hamp.ClientHamp;
     import bache.map.MapService;
@@ -48,6 +49,7 @@ Java
     // or calling it synchronously using a synchronous Java interface
     MapServiceSync<String,String> mapSync = client.lookup("/map/123").as(MapServiceSync.class);
     System.out.println("value is: " + map.get("foo"));
+```
 
 When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do all the magic marshalling arguments back and forth.  Bache provides both asynchronous (e.g. MapService) and synchronous
 (e.g. MapServiceSync) interfaces for its services.
@@ -63,6 +65,7 @@ URL         | Async API     | Sync API
 
 PHP
 -------
+```php
     <?php
     
     require_once('baratine-php/baratine-client.php');
@@ -83,6 +86,7 @@ PHP
     
     // an exception is thrown because doesNotExist() does not exist in your MapService.php class
     $map->doesNotExist(123, 456);
+```
 
 The directory `baratine-php/` is located within the Baratine distribution directory `baratine/modules/`
 
@@ -98,20 +102,26 @@ It serves to demonstrate that:
 
 Redis commands in Retwis like:
 
+```php
     $r->lpush("timeline",$postid);
     $r->ltrim("timeline",0,1000);
+```
 
 were replaced with:
 
+```php
     lookupList("/list/timeline")->pushHead($postid);
     lookupList("/list/timeline")->trim(0,1000);
-    
+```
+
 where `lookupList()` uses the `baratine/modules/baratine-php` client library as follows:
 
+```php
     function lookupList(/* string */ $url)
     {
       return getBaratineClient()->_lookup($url)->_as('\baratine\cache\ListService');
     }
+```
 
 In Bache, `/list` is the parent service and `/list/timeline` is a child service
 that shares the parent's inbox.  A call to `pushHead()` would:
@@ -136,6 +146,7 @@ How is Bache Implemented
 ========================
 Bache data structures are each a journaled `@Service`:
 
+```java
     @Journal
     @Service("/list")
     public class ListServiceManagerImpl
@@ -151,7 +162,8 @@ Bache data structures are each a journaled `@Service`:
     @Journal
     @Service("/counter")
     public class CounterServiceManagerImpl
-    
+```
+
 In Baratine, a service needs to implement `@OnLookup` if it wants to handle child URLs
 (e.g. `/list` is the parent and `/list/foo123` is the child).  Otherwise, the caller would get a service-not-found exception.
 
@@ -159,6 +171,7 @@ For `ListServiceManagerImpl`, it's `@OnLookup` simply returns a `ListServiceImpl
 instance in an LRU and perform lifecycle operations as needed.  `ListServiceImpl` participates in the lifecycle operations by
 implementing `@OnLoad` and `@OnSave`:
 
+```java
     @OnLoad
     public void onLoad(Result<Boolean> result)
     {
@@ -206,6 +219,7 @@ implementing `@OnLoad` and `@OnSave`:
         log.fine(getClass().getSimpleName() + ".onSave1: id=" + _id + " done");
       }
     }
+```
 
 The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is called when:
 
