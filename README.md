@@ -54,11 +54,11 @@ When you do a lookup(), you may cast the proxy to whatever interface class you w
 
 URL         | Async API     | Sync API
 ------------|---------------|---------
-/map        | [MapService](src/main/java/bache/map/MapService.java) | [MapServiceSync](src/main/java/bache/map/MapServiceSync.java)
-/list        | [ListService](src/main/java/bache/list/ListService.java) | [ListServiceSync](src/main/java/bache/list/ListServiceSync.java)
-/tree        | [TreeService](src/main/java/bache/tree/TreeService.java) | [TreeServiceSync](src/main/java/bache/tree/TreeServiceSync.java)
-/string        | [StringService](src/main/java/bache/string/StringService.java) | [StringServiceSync](src/main/java/bache/string/StringServiceSync.java)
-/counter        | [CounterService](src/main/java/bache/counter/CounterService.java) | [CounterServiceSync](src/main/java/bache/counter/CounterServiceSync.java)
+/map        | [bache.map.MapService](src/main/java/bache/map/MapService.java) | [bache.map.MapServiceSync](src/main/java/bache/map/MapServiceSync.java)
+/list        | [bache.list.ListService](src/main/java/bache/list/ListService.java) | [bache.list.ListServiceSync](src/main/java/bache/list/ListServiceSync.java)
+/tree        | [bache.tree.TreeService](src/main/java/bache/tree/TreeService.java) | [bache.tree.TreeServiceSync](src/main/java/bache/tree/TreeServiceSync.java)
+/string        | [bache.string.StringService](src/main/java/bache/string/StringService.java) | [bache.string.StringServiceSync](src/main/java/bache/string/StringServiceSync.java)
+/counter        | [bache.counter.CounterService](src/main/java/bache/counter/CounterService.java) | [bache.counter.CounterServiceSync](src/main/java/bache/counter/CounterServiceSync.java)
 
 
 PHP
