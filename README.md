@@ -67,7 +67,7 @@ PHP
     
     require_once('baratine-php/baratine-client.php');
     
-    $client = new BaratineClient('http://localhost:8085/s/pod');
+    $client = new baratine\BaratineClient('http://localhost:8085/s/pod');
     
     $service = $client->_lookup('/map/123');
     
