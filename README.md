@@ -134,9 +134,10 @@ Bartwit vs Retwis Benchmark
 ---------------------------
 For the same number of users and posts on `timeline.php`:
 
-Bartwit: 1 client **1140** requests/sec, 64 clients **2790** requests/sec
-
-Retwis: 1 client **1160** requests/sec, 64 clients **3570** requests/sec
+|         |   1 client   | 64 clients
+--------- | ------------ | -------------------
+| Retwis  |  1160 req/s  | 3570 req/s
+| Bartwit |  1140 req/s  | 2790 req/s
 
 Bartwit shows that for a real world application, Bache (and in turn Baratine) performs very competitively versus Redis. 
 The big difference is that Bache is just Java code packaged within a jar file; you can easily extend Bache
