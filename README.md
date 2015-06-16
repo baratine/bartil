@@ -217,6 +217,18 @@ The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is
 2. the service is shutting down, or
 3. someone requested a save with a call to this service's `io.baratine.core.ServiceRef.save()`
 
+| Parent                     | Child                |
+---------------------------- | -------------------- |
+| [MapManagerServiceImpl](src/main/java/bache/map/MapManagerServiceImpl.java)      | [MapServiceImpl](src/main/java/bache/map/MapServiceImpl.java)       |
+| [ListManagerServiceImpl](src/main/java/bache/list/ListManagerServiceImpl.java)     | [ListServiceImpl](src/main/java/bache/list/ListServiceImpl.java)      |
+| [TreeManagerServiceImpl](src/main/java/bache/tree/TreeManagerServiceImpl.java)     | [TreeServiceImpl](src/main/java/bache/tree/TreeServiceImpl.java)      |
+| [StringManagerServiceImpl](src/main/java/bache/string/StringManagerServiceImpl.java)   | [StringServiceImpl](src/main/java/bache/string/StringServiceImpl.java)    |
+| [CounterManagerServiceImpl](src/main/java/bache/counter/CounterManagerServiceImpl.java)  | [CounterServiceImpl](src/main/java/bache/counter/CounterServiceImpl.java)   |
+
+In Bache, the parent services are responsible for instantiating the child services (through `@OnLookup`) and handling query
+and multi-key delete requests.  The child services handle most of the application logic.  But there is no restriction from
+putting more application logic in the parent.
+
 Example Architecture Diagram (Bartwit)
 --------------------------------------
 ![bartwit diagram](https://github.com/baratine/bache/blob/master/bartwit.png)
