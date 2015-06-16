@@ -150,19 +150,23 @@ Bache data structures are each a journaled `@Service`:
 ```java
     @Journal
     @Service("/list")
-    public class ListServiceManagerImpl
+    public class ListManagerServiceImpl
     
     @Journal
     @Service("/map")
-    public class MapServiceManagerImpl
+    public class MapManagerServiceImpl
     
     @Journal
     @Service("/tree")
-    public class TreeServiceManagerImpl
+    public class TreeManagerServiceImpl
+    
+    @Journal
+    @Service("/string")
+    public class StringManagerServiceImpl
     
     @Journal
     @Service("/counter")
-    public class CounterServiceManagerImpl
+    public class CounterManagerServiceImpl
 ```
 
 In Baratine, a service needs to implement `@OnLookup` if it wants to handle child URLs
