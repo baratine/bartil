@@ -217,3 +217,6 @@ The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is
 2. the service is shutting down, or
 3. someone requested a save with a call to this service's `io.baratine.core.ServiceRef.save()`
 
+Example Architecture Diagram (Bartwit)
+--------------------------------------
+![bartwit diagram](https://github.com/baratine/bache/blob/master/bartwit.png)
