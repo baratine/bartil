@@ -1,13 +1,14 @@
-Bache is a Baratine service that exposes common data structures as a service.
+Bache is a Baratine service that exposes common data structures as a REST service.
 Bache provides a map, list, tree, string, and counter type that are callable
 from any client supporting WebSockets or HTTP.  You can store any object as
 both the key or value field in the map, list, and tree data types.
 
-In many ways, Bache is very similar to [Redis](http://redis.io/) and Bache
-services should be familiar to Redis users.  Bache is used to show
-that you can write any kind of Baratine service that runs about as fast as Redis, but
-with much more functionality (and without having to resort to Lua scripting, as is
-the case with Redis).
+TODO: persistence and journaling
+
+In many ways, Bache is very similar to [Redis](http://redis.io/); Bache services should be familiar to Redis users.
+Bache shows that you can write any kind of Baratine service that runs about as fast as Redis, but with much more
+functionality (and without having to resort to Lua scripting).
+
 
 Usage
 ==========
@@ -31,28 +32,13 @@ Java
 
     ClientHamp client = new ClientHamp("http://localhost:8085/s/pod";
     
-    MapService<String,String> map = client.lookup("/map/123").as(MapService.class);
-    
-    // calling it asynchronously    
-    map.put("foo", "aaa", /* int */ size -> {
-      System.out.println("new size is: " + size);
-    });
-    
-    Thread.sleep(2000);
-    
-    // calling it synchronously
-    ResultFuture<String> valueFuture = new ResultFuture<>();
-    
-    map.get("foo", valueFuture);
-    System.out.println("value is: " + valueFuture.get());
-    
-    // or calling it synchronously using a synchronous Java interface
     MapServiceSync<String,String> mapSync = client.lookup("/map/123").as(MapServiceSync.class);
     System.out.println("value is: " + map.get("foo"));
 ```
 
-When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do all the magic marshalling arguments back and forth.  Bache provides both asynchronous (e.g. MapService) and synchronous
-(e.g. MapServiceSync) interfaces for its services.
+TODO: talk about lookup instances
+
+When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do all the magic marshalling arguments back and forth.  Bache provides both asynchronous and synchronous interfaces for its services.
 
 URL         | Async API     | Sync API
 ------------|---------------|---------
@@ -97,7 +83,7 @@ Bartwit Example Application
 [Retwis](http://redis.io/topics/twitter-clone) that uses Bache in lieu of Redis.
 It serves to demonstrate that:
 
-1. Bache can easily replace Redis, and that
+1. Bache can replace Redis, and that
 2. you can use Bache/Baratine as your primary datastore instead of a traditional SQL database
 
 Redis commands in Retwis like:
@@ -123,12 +109,13 @@ where `lookupList()` uses the `baratine/modules/baratine-php` client library as 
     }
 ```
 
-In Bache, `/list` is the parent service and `/list/timeline` is a child service
+In Bache, `/list` is the parent service and `/list/timeline` is a child instance
 that shares the parent's inbox.  A call to `pushHead()` would:
 
 1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
 2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
 3. finally Baratine calls the `ListServiceImpl.pushHead()` method
+
 
 Bartwit vs Retwis Benchmark
 ---------------------------
@@ -139,9 +126,9 @@ For the same number of users and posts on `timeline.php`:
 | Retwis  |  1160 req/s  | 3570 req/s
 | Bartwit |  1140 req/s  | 2790 req/s
 
-Bartwit shows that for a real world application, Bache (and in turn Baratine) performs very competitively versus Redis. 
-The big difference is that Bache is just Java code packaged within a jar file; you can easily extend Bache
-with bespoke functionality that better suits your specific application.
+Bache (and in turn Baratine) performs very competitively versus Redis.   The big difference is that Bache is just Java code
+packaged within a jar file; you can easily extend Bache with bespoke functionality that better suits your specific application.
+
 
 How is Bache Implemented
 ========================
@@ -172,7 +159,7 @@ Bache data structures are each a journaled `@Service`:
 In Baratine, a service needs to implement `@OnLookup` if it wants to handle child URLs
 (e.g. `/list` is the parent and `/list/foo123` is the child).  Otherwise, the caller would get a service-not-found exception.
 
-For `ListServiceManagerImpl`, it's `@OnLookup` simply returns a `ListServiceImpl` instance.  Baratine will cache that
+For `ListServiceManagerImpl`, its `@OnLookup` simply returns a `ListServiceImpl` instance.  Baratine will cache that
 instance in an LRU and perform lifecycle operations as needed.  `ListServiceImpl` participates in the lifecycle operations by
 implementing `@OnLoad` and `@OnSave`:
 
@@ -232,6 +219,12 @@ The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is
 In Bache, the parent services are responsible for instantiating the child services (through `@OnLookup`) and handling query
 and multi-key delete requests.  The child services handle most of the application logic.  But there is no restriction from
 putting more application logic in the parent.
+
+
+Journaling
+----------
+TODO: talk about journaling
+
 
 Example Architecture Diagram (Bartwit)
 --------------------------------------
