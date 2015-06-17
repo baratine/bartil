@@ -50,6 +50,22 @@ URL         | Async API     | Sync API
 /string        | [bache.string.StringService](src/main/java/bache/string/StringService.java) | [bache.string.StringServiceSync](src/main/java/bache/string/StringServiceSync.java)
 /counter        | [bache.counter.CounterService](src/main/java/bache/counter/CounterService.java) | [bache.counter.CounterServiceSync](src/main/java/bache/counter/CounterServiceSync.java)
 
+Using the async API is as easy as casting the proxy to the async interface:
+
+```java
+    MapService<String,String> map = client.lookup("/map/123").as(MapService.class);
+    
+    System.out.println("start");
+    
+    map.get("foo", value -> System.out.println("value is: " + value));
+    
+    System.out.println("end");
+    
+    // output will be:
+    //   start
+    //   end
+    //   value is: 123
+```
 
 PHP
 -------
