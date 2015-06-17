@@ -1,11 +1,12 @@
-Bache is a Baratine service that exposes common data structures as a REST service.
-Bache provides a map, list, tree, string, and counter type that are callable
-from any client supporting WebSockets or HTTP.  You can store any object as
-both the key or value field in the map, list, and tree data types.
+Bache is a Baratine service that exposes common data structures as REST services. Bache provides a map, list, tree, string,
+and counter type that are callable from any client supporting WebSockets or HTTP.  You can store any object as both the
+key or value field in the map, list, and tree data types.
 
-TODO: persistence and journaling
+Bache services are persistent; they are stored into Baratine's internal key-value store, io.baratine.core.Store.
+Saves to the store are batched for high performance and efficiency.  Bache uses a journal to ensure that batched saves are
+reliable and that there will be no data loss.  
 
-In many ways, Bache is very similar to [Redis](http://redis.io/); Bache services should be familiar to Redis users.
+In many ways, Bache is very similar to [Redis](http://redis.io/); thus, Bache services should be familiar to Redis users.
 Bache shows that you can write any kind of Baratine service that runs about as fast as Redis, but with much more
 functionality (and without having to resort to Lua scripting).
 
@@ -20,7 +21,7 @@ Bache provides the following services:
 * [/string](src/main/java/bache/string/StringService.java)
 * [/counter](src/main/java/bache/counter/CounterService.java)
 
-To call the /map service for example (assuming you deployed it to the default pod):
+To call the `/map` service for example (assuming you deployed it to the default pod):
 
 Java
 ------
@@ -36,7 +37,7 @@ Java
     System.out.println("value is: " + map.get("foo"));
 ```
 
-TODO: talk about lookup instances
+The `lookup()` creates a proxy for an instance of `/map` named `/123`.  Nothing is sent to the service yet at this moment.
 
 When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do a little
 bit of magic to marshal arguments back and forth.  Bache provides both asynchronous and synchronous interfaces for its
@@ -236,13 +237,16 @@ The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is
 | [CounterManagerServiceImpl](src/main/java/bache/counter/CounterManagerServiceImpl.java)  | [CounterServiceImpl](src/main/java/bache/counter/CounterServiceImpl.java)   |
 
 In Bache, the parent services are responsible for instantiating the child services (through `@OnLookup`) and handling query
-and multi-key delete requests.  The child services handle most of the application logic.  But there is no restriction from
-putting more application logic in the parent.
+and multi-key delete requests.  The child services handle most of the application logic.  With that said, there is nothing
+restricting us from putting more application logic into the parent.
 
 
 Journaling
 ----------
-TODO: talk about journaling
+Bache services use Baratine's `@Journal` to journal incoming requests before processing them.  In the case of a crash or
+restart, Baratine will replay the journal for a particular service to bring the service to a consistent state.  These
+replayed requests look like normal requests but the service may choose to detect a replay event to handle side-effects.
+In the case of Bache, it doesn't do anything special besides just using the `@Journal` annotation and benefiting from it.
 
 
 Example Architecture Diagram (Bartwit)
