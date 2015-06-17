@@ -38,7 +38,9 @@ Java
 
 TODO: talk about lookup instances
 
-When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do all the magic marshalling arguments back and forth.  Bache provides both asynchronous and synchronous interfaces for its services.
+When you do a lookup(), you may cast the proxy to whatever interface class you want.  The Baratine proxy will do a little
+bit of magic to marshal arguments back and forth.  Bache provides both asynchronous and synchronous interfaces for its
+services.
 
 URL         | Async API     | Sync API
 ------------|---------------|---------
@@ -126,8 +128,9 @@ For the same number of users and posts on `timeline.php`:
 | Retwis  |  1160 req/s  | 3570 req/s
 | Bartwit |  1140 req/s  | 2790 req/s
 
-Bache (and in turn Baratine) performs very competitively versus Redis.   The big difference is that Bache is just Java code
-packaged within a jar file; you can easily extend Bache with bespoke functionality that better suits your specific application.
+Bache (and in turn Baratine) performs very competitively versus Redis.   Bache is just Java code
+packaged within a jar file and you can easily extend Bache with bespoke functionality that better suits your specific
+application.
 
 
 How is Bache Implemented
