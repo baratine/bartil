@@ -115,66 +115,6 @@ The directory `baratine-php/` is located in the Baratine distribution directory
 `baratine/modules/`
 
 
-Bartwit Example Application
-===========================
-[Bartwit](https://github.com/baratine/bartwit) is a fork of
-[Retwis](http://redis.io/topics/twitter-clone) that uses Bache in lieu of Redis.
-It serves to demonstrate that:
-
-1. Bache can replace Redis, and that
-2. you can use Bache/Baratine as your primary datastore instead of a traditional SQL database
-
-Redis commands in Retwis like:
-
-```php
-
-    $r->lpush("timeline",$postid);
-    $r->ltrim("timeline",0,1000);
-
-```
-
-were replaced with:
-
-```php
-
-    lookupList("/list/timeline")->pushHead($postid);
-    lookupList("/list/timeline")->trim(0,1000);
-
-```
-
-where `lookupList()` uses the `baratine/modules/baratine-php` client library as follows:
-
-```php
-
-    function lookupList(/* string */ $url)
-    {
-      return getBaratineClient()->_lookup($url)->_as('\baratine\cache\ListService');
-    }
-
-```
-
-In Bache, `/list` is the parent service and `/list/timeline` is a child instance
-that shares the parent's inbox.  A call to `pushHead()` would:
-
-1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
-2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
-3. finally Baratine calls the `ListServiceImpl.pushHead()` method
-
-
-Bartwit vs Retwis Benchmark
----------------------------
-For the same number of users and posts on `timeline.php`:
-
-|         |   1 client   | 64 clients
---------- | ------------ | -------------------
-| Retwis  |  1160 req/s  | 3570 req/s
-| Bartwit |  1140 req/s  | 2790 req/s
-
-Bache (and in turn Baratine) performs very competitively versus Redis.  Bache is
-just Java code packaged within a jar file and you can easily extend Bache with
-bespoke functionality that better suits your specific application.
-
-
 How is Bache Implemented
 ========================
 Bache data structures are each a journaled `@Service`:
@@ -214,19 +154,11 @@ operations by implementing `@OnLoad` and `@OnSave`:
     @OnLoad
     public void onLoad(Result<Boolean> result)
     {
-      getStore().get(_storeKey, result.from(v->onLoadComplete(v)));
-    }
-
-    private boolean onLoadComplete(LinkedList<T> list)
-    {
-      if (list != null) {
-        _list = list;
-      }
-      else {
-        _list = null;
-      }
-
-      return true;
+      getStore().get(_storeKey, list -> {
+          _list = list;
+          
+          result.complete(true);
+      });
     }
 
     @OnSave
@@ -296,7 +228,7 @@ will inform the client with a redirect.
 By default, each service is backed up by two hot standbys.  The service's inbox
 and journal are streamed to its standbys.  In the event of a crash, Baratine's
 heartbeat system will detect the event and promote one of the service's
-standbys to the active service.
+standbys to be the active service.
 
 
 Journaling
@@ -310,6 +242,66 @@ do anything special besides just using the `@Journal` annotation and benefiting
 from the additional reliability that a journal provides.
 
 
-Example Architecture Diagram (Bartwit)
+Bartwit Example Application
+===========================
+[Bartwit](https://github.com/baratine/bartwit) is a fork of
+[Retwis](http://redis.io/topics/twitter-clone) that uses Bache in lieu of Redis.
+It serves to demonstrate that:
+
+1. Bache can replace Redis, and that
+2. you can use Bache/Baratine as your primary datastore instead of a traditional SQL database
+
+Redis commands in Retwis like:
+
+```php
+
+    $r->lpush("timeline",$postid);
+    $r->ltrim("timeline",0,1000);
+
+```
+
+were replaced with:
+
+```php
+
+    lookupList("/list/timeline")->pushHead($postid);
+    lookupList("/list/timeline")->trim(0,1000);
+
+```
+
+where `lookupList()` uses the `baratine/modules/baratine-php` client library as follows:
+
+```php
+
+    function lookupList(/* string */ $url)
+    {
+      return getBaratineClient()->_lookup($url)->_as('\baratine\cache\ListService');
+    }
+
+```
+
+In Bache, `/list` is the parent service and `/list/timeline` is a child instance
+that shares the parent's inbox.  A call to `pushHead()` would:
+
+1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
+2. `@OnLookup` returns the child instance that would handle the request: `ListServiceImpl`
+3. finally Baratine calls the `ListServiceImpl.pushHead()` method
+
+
+Bartwit vs Retwis Benchmark
+---------------------------
+For the same number of users and posts on `timeline.php`:
+
+|         |   1 client   | 64 clients
+--------- | ------------ | -------------------
+| Retwis  |  1160 req/s  | 3570 req/s
+| Bartwit |  1140 req/s  | 2790 req/s
+
+Bache (and in turn Baratine) performs very competitively versus Redis.  Bache is
+just Java code packaged within a jar file and you can easily extend Bache with
+bespoke functionality that better suits your specific application.
+
+
+Bartwit Architecture Diagram
 --------------------------------------
 ![bartwit diagram](https://github.com/baratine/bache/blob/master/bartwit.png)
