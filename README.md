@@ -180,7 +180,6 @@ How is Bache Implemented
 Bache data structures are each a journaled `@Service`:
 
 ```java
-
     @Journal
     @Service("/list")
     public class ListManagerServiceImpl
@@ -200,7 +199,6 @@ Bache data structures are each a journaled `@Service`:
     @Journal
     @Service("/counter")
     public class CounterManagerServiceImpl
-
 ```
 
 In Baratine, a service needs to implement `@OnLookup` if it wants to handle
@@ -213,7 +211,6 @@ operations as needed.  `ListServiceImpl` participates in the lifecycle
 operations by implementing `@OnLoad` and `@OnSave`:
 
 ```java
-
     @OnLoad
     public void onLoad(Result<Boolean> result)
     {
@@ -245,7 +242,6 @@ operations by implementing `@OnLoad` and `@OnSave`:
 
       result.complete(true);
     }
-
 ```
 
 The state of the service is persisted to `io.baratine.core.Store`.  `@OnLoad` is
@@ -286,10 +282,21 @@ Bache:
 
 Suppose a pod has 5 servers, Bache will be sharded across those 5 servers.  On
 average, each server would handle 20% of the requests and also hold 20% of the
-data.  If a client sends a request to the wrong server for a given URL, Baratine
+data.
+
+
+### Redirects ###
+If a client sends a request to the wrong server for a given URL, Baratine
 will inform the client with a redirect.
 
 ![redirect diagram](https://github.com/baratine/bache/blob/master/redirect.png)
+
+
+### Redundancy ###
+By default, each service is backed up by two hot standbys.  The service's inbox
+and journal are streamed to its standbys.  In the event of a crash, Baratine's
+heartbeat system will detect the event and promote one of the service's
+standbys to the active service.
 
 
 Journaling
