@@ -10,7 +10,7 @@ import io.baratine.core.Modify;
 import io.baratine.core.OnLoad;
 import io.baratine.core.OnSave;
 import io.baratine.core.Result;
-import io.baratine.core.ResultSink;
+import io.baratine.core.ResultStream;
 import io.baratine.store.Store;
 import io.baratine.stream.StreamBuilder;
 
@@ -285,7 +285,7 @@ public class ListServiceImpl<T> implements ListService<T>
     throw new IllegalStateException();
   }
 
-  public void stream(ResultSink<T> sink, int start, int end)
+  public void stream(ResultStream<T> sink, int start, int end)
   {
     end = Math.min(end, _list.size());
 
@@ -303,7 +303,7 @@ public class ListServiceImpl<T> implements ListService<T>
       i++;
     }
 
-    sink.end();
+    sink.complete();
   }
 
   @OnLoad
@@ -313,7 +313,7 @@ public class ListServiceImpl<T> implements ListService<T>
       log.fine(getClass().getSimpleName() + ".onLoad0: id=" + _id);
     }
 
-    getStore().get(_storeKey, result.from(v->onLoadComplete(v)));
+    getStore().get(_storeKey, result.from(list -> onLoadComplete(list)));
   }
 
   private boolean onLoadComplete(LinkedList<T> list)

@@ -525,7 +525,7 @@ public class ListServiceTest
     Assert.assertEquals(2, service1.size());
   }
 
-  @Test
+  //@Test
   public void testStream()
   {
     String id = "" + _count.getAndIncrement();
