@@ -1,33 +1,33 @@
-Bache is a Baratine service that exposes common data structures as
-REST services. Bache provides a map, list, tree, string, and counter type that
+Bartil is a Baratine service that exposes common data structures as
+REST services. Bartil provides a map, list, tree, string, and counter type that
 are callable from any client supporting WebSockets or HTTP.  You can store any
 object as the key or value field in the map, list, and tree data types.
 
-Bache services are persistent; they are stored into Baratine's internal
+Bartil services are persistent; they are stored into Baratine's internal
 key-value store, `io.baratine.core.Store`.  Saves to the store are batched for
-high performance and efficiency.  Bache uses a journal to ensure that batched
+high performance and efficiency.  Bartil uses a journal to ensure that batched
 saves are reliable and protected from data loss.
 
-Bache services are addressed by URL.  This enables clustering out of the box
-with no change in code.  When Bache is deployed to a multi-server Baratine pod
+Bartil services are addressed by URL.  This enables clustering out of the box
+with no change in code.  When Bartil is deployed to a multi-server Baratine pod
 (virtual cluster), its services become sharded automatically; requests are
 hashed on the URL and sent to the owning server.
 
-In many ways, Bache is very similar to [Redis](http://redis.io/); thus, Bache
-services should be familiar to Redis users.  Bache shows that you can write any
+In many ways, Bartil is very similar to [Redis](http://redis.io/); thus, Bartil
+services should be familiar to Redis users.  Bartil shows that you can write any
 kind of Baratine service that runs about as fast as Redis, but with much more
 functionality (without having to resort to Lua scripting).
 
 
 Usage
 ==========
-Bache provides the following services:
+Bartil provides the following services:
 
-* [/map](src/main/java/bache/map/MapService.java)
-* [/list](src/main/java/bache/list/ListService.java)
-* [/tree](src/main/java/bache/tree/TreeService.java)
-* [/string](src/main/java/bache/string/StringService.java)
-* [/counter](src/main/java/bache/counter/CounterService.java)
+* [/map](src/main/java/bartil/map/MapService.java)
+* [/list](src/main/java/bartil/list/ListService.java)
+* [/tree](src/main/java/bartil/tree/TreeService.java)
+* [/string](src/main/java/bartil/string/StringService.java)
+* [/counter](src/main/java/bartil/counter/CounterService.java)
 
 To call the `/map` service for example (assuming you deployed it to the default
 pod):
@@ -39,8 +39,8 @@ Java
     import io.baratine.core.ResultFuture;
     import com.caucho.baratine.client.BaratineClient;
     
-    import bache.map.MapService;
-    import bache.map.MapServiceSync;
+    import bartil.map.MapService;
+    import bartil.map.MapServiceSync;
 
     BaratineClient client = new BaratineClient("http://127.0.0.1:8085/s/pod");
     
@@ -54,16 +54,16 @@ is sent to the service yet at this moment.
 
 When you do a `lookup()`, you may cast the proxy to whatever interface class
 you want.  The Baratine proxy will do a little bit of magic to marshal arguments
-back and forth.  Bache provides both asynchronous and synchronous interfaces for
+back and forth.  Bartil provides both asynchronous and synchronous interfaces for
 its services.
 
 URL         | Async API     | Sync API
 ------------|---------------|---------
-/map        | [bache.map.MapService](src/main/java/bache/map/MapService.java) | [bache.map.MapServiceSync](src/main/java/bache/map/MapServiceSync.java)
-/list        | [bache.list.ListService](src/main/java/bache/list/ListService.java) | [bache.list.ListServiceSync](src/main/java/bache/list/ListServiceSync.java)
-/tree        | [bache.tree.TreeService](src/main/java/bache/tree/TreeService.java) | [bache.tree.TreeServiceSync](src/main/java/bache/tree/TreeServiceSync.java)
-/string        | [bache.string.StringService](src/main/java/bache/string/StringService.java) | [bache.string.StringServiceSync](src/main/java/bache/string/StringServiceSync.java)
-/counter        | [bache.counter.CounterService](src/main/java/bache/counter/CounterService.java) | [bache.counter.CounterServiceSync](src/main/java/bache/counter/CounterServiceSync.java)
+/map        | [bartil.map.MapService](src/main/java/bartil/map/MapService.java) | [bartil.map.MapServiceSync](src/main/java/bartil/map/MapServiceSync.java)
+/list        | [bartil.list.ListService](src/main/java/bartil/list/ListService.java) | [bartil.list.ListServiceSync](src/main/java/bartil/list/ListServiceSync.java)
+/tree        | [bartil.tree.TreeService](src/main/java/bartil/tree/TreeService.java) | [bartil.tree.TreeServiceSync](src/main/java/bartil/tree/TreeServiceSync.java)
+/string        | [bartil.string.StringService](src/main/java/bartil/string/StringService.java) | [bartil.string.StringServiceSync](src/main/java/bartil/string/StringServiceSync.java)
+/counter        | [bartil.counter.CounterService](src/main/java/bartil/counter/CounterService.java) | [bartil.counter.CounterServiceSync](src/main/java/bartil/counter/CounterServiceSync.java)
 
 Using the async API is as easy as casting the proxy to the async interface:
 
@@ -115,9 +115,9 @@ The directory `baratine-php/` is located in the Baratine distribution directory
 `baratine/modules/`
 
 
-How is Bache Implemented
+How is Bartil Implemented
 ========================
-Bache data structures are each a journaled `@Service`:
+Bartil data structures are each a journaled `@Service`:
 
 ```java
     @Journal
@@ -190,13 +190,13 @@ called when:
 
 | Parent                     | Child                |
 ---------------------------- | -------------------- |
-| [MapManagerServiceImpl](src/main/java/bache/map/MapManagerServiceImpl.java)      | [MapServiceImpl](src/main/java/bache/map/MapServiceImpl.java)       |
-| [ListManagerServiceImpl](src/main/java/bache/list/ListManagerServiceImpl.java)     | [ListServiceImpl](src/main/java/bache/list/ListServiceImpl.java)      |
-| [TreeManagerServiceImpl](src/main/java/bache/tree/TreeManagerServiceImpl.java)     | [TreeServiceImpl](src/main/java/bache/tree/TreeServiceImpl.java)      |
-| [StringManagerServiceImpl](src/main/java/bache/string/StringManagerServiceImpl.java)   | [StringServiceImpl](src/main/java/bache/string/StringServiceImpl.java)    |
-| [CounterManagerServiceImpl](src/main/java/bache/counter/CounterManagerServiceImpl.java)  | [CounterServiceImpl](src/main/java/bache/counter/CounterServiceImpl.java)   |
+| [MapManagerServiceImpl](src/main/java/bartil/map/MapManagerServiceImpl.java)      | [MapServiceImpl](src/main/java/bartil/map/MapServiceImpl.java)       |
+| [ListManagerServiceImpl](src/main/java/bartil/list/ListManagerServiceImpl.java)     | [ListServiceImpl](src/main/java/bartil/list/ListServiceImpl.java)      |
+| [TreeManagerServiceImpl](src/main/java/bartil/tree/TreeManagerServiceImpl.java)     | [TreeServiceImpl](src/main/java/bartil/tree/TreeServiceImpl.java)      |
+| [StringManagerServiceImpl](src/main/java/bartil/string/StringManagerServiceImpl.java)   | [StringServiceImpl](src/main/java/bartil/string/StringServiceImpl.java)    |
+| [CounterManagerServiceImpl](src/main/java/bartil/counter/CounterManagerServiceImpl.java)  | [CounterServiceImpl](src/main/java/bartil/counter/CounterServiceImpl.java)   |
 
-In Bache, the parent services are responsible for instantiating the child
+In Bartil, the parent services are responsible for instantiating the child
 services (through `@OnLookup`) and handling query and multi-key delete requests.
 The child services handle most of the application logic.  With that said, there
 is nothing restricting us from putting more application logic into the parent.
@@ -204,15 +204,15 @@ is nothing restricting us from putting more application logic into the parent.
 
 Clustering
 ----------
-Because of child services and URL addressing, Baratine (and in turn Bache)
+Because of child services and URL addressing, Baratine (and in turn Bartil)
 supports clustering/sharding with no change in code.  To deploy a clustered
-Bache:
+Bartil:
 
 1. create a Baratine cluster with multiple servers
 2. create a pod (virtual cluster) with multiple servers
-3. deploy Bache to that pod
+3. deploy Bartil to that pod
 
-Suppose a pod has 5 servers, Bache will be sharded across those 5 servers.  On
+Suppose a pod has 5 servers, Bartil will be sharded across those 5 servers.  On
 average, each server would handle 20% of the requests and also hold 20% of the
 data.
 
@@ -221,7 +221,7 @@ data.
 If a client sends a request to the wrong server for a given URL, Baratine
 will inform the client with a redirect.
 
-![redirect diagram](https://github.com/baratine/bache/blob/master/redirect.png)
+![redirect diagram](https://github.com/baratine/bartil/blob/master/redirect.png)
 
 
 ### Redundancy ###
@@ -233,11 +233,11 @@ standbys to be the active service.
 
 Journaling
 ----------
-Bache services use Baratine's `@Journal` to journal incoming requests before
+Bartil services use Baratine's `@Journal` to journal incoming requests before
 processing them.  In the case of a crash or restart, Baratine will replay the
 journal for a particular service to bring the service to a consistent state.
 These replayed requests look like normal requests but the service may choose to
-detect a replay event to handle side-effects.  In the case of Bache, it doesn't
+detect a replay event to handle side-effects.  In the case of Bartil, it doesn't
 do anything special besides just using the `@Journal` annotation and benefiting
 from the additional reliability that a journal provides.
 
@@ -245,11 +245,11 @@ from the additional reliability that a journal provides.
 Bartwit Example Application
 ===========================
 [Bartwit](https://github.com/baratine/bartwit) is a fork of
-[Retwis](http://redis.io/topics/twitter-clone) that uses Bache in lieu of Redis.
+[Retwis](http://redis.io/topics/twitter-clone) that uses Bartil in lieu of Redis.
 It serves to demonstrate that:
 
-1. Bache can replace Redis, and that
-2. you can use Bache/Baratine as your primary datastore instead of a traditional SQL database
+1. Bartil can replace Redis, and that
+2. you can use Bartil/Baratine as your primary datastore instead of a traditional SQL database
 
 Redis commands in Retwis like:
 
@@ -280,7 +280,7 @@ where `lookupList()` uses the `baratine/modules/baratine-php` client library as 
 
 ```
 
-In Bache, `/list` is the parent service and `/list/timeline` is a child instance
+In Bartil, `/list` is the parent service and `/list/timeline` is a child instance
 that shares the parent's inbox.  A call to `pushHead()` would:
 
 1. call into the service's `@OnLookup` annotated method: `ListServiceManagerImpl.onLookup()`
@@ -297,11 +297,11 @@ For the same number of users and posts on `timeline.php`:
 | Retwis  |  1160 req/s  | 3570 req/s
 | Bartwit |  1140 req/s  | 2790 req/s
 
-Bache (and in turn Baratine) performs very competitively versus Redis.  Bache is
-just Java code packaged within a jar file and you can easily extend Bache with
+Bartil (and in turn Baratine) performs very competitively versus Redis.  Bartil is
+just Java code packaged within a jar file and you can easily extend Bartil with
 bespoke functionality that better suits your specific application.
 
 
 Bartwit Architecture Diagram
 --------------------------------------
-![bartwit diagram](https://github.com/baratine/bache/blob/master/bartwit.png)
+![bartwit diagram](https://github.com/baratine/bartil/blob/master/bartwit.png)
