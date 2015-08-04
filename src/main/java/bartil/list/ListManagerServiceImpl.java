@@ -11,10 +11,10 @@ import java.util.LinkedList;
 import javax.inject.Inject;
 
 @Journal
-@Service("public:///list")
+@Service("/_list")
 public class ListManagerServiceImpl<T> implements ListManagerService
 {
-  @Inject @Lookup("store:///list")
+  @Inject @Lookup("store:///_list")
   private Store<LinkedList<T>> _store;
 
   @OnLookup

@@ -9,10 +9,10 @@ import io.baratine.core.Service;
 import io.baratine.store.Store;
 
 @Journal
-@Service("public:///counter")
+@Service("/_counter")
 public class CounterManagerServiceImpl implements CounterManagerService
 {
-  @Inject @Lookup("store:///counter")
+  @Inject @Lookup("store:///_counter")
   private Store<Long> _store;
 
   @OnLookup

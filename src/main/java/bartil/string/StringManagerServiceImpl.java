@@ -15,10 +15,10 @@ import io.baratine.core.ServiceRef;
 import io.baratine.store.Store;
 
 @Journal
-@Service("public:///string")
+@Service("/_string")
 public class StringManagerServiceImpl implements StringManagerService
 {
-  @Inject @Lookup("store:///string")
+  @Inject @Lookup("store:///_string")
   private Store<String> _store;
 
   private transient long _watchCount;
@@ -45,7 +45,7 @@ public class StringManagerServiceImpl implements StringManagerService
       key = "/" + key;
     }
 
-    StringService service = manager.lookup("/string" + key).as(StringService.class);
+    StringService service = manager.lookup("/string-internal" + key).as(StringService.class);
 
     WatchEntry entry = new WatchEntry(watchId, service);
 

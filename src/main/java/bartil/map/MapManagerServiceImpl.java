@@ -16,10 +16,10 @@ import java.util.function.Function;
 import javax.inject.Inject;
 
 @Journal
-@Service("public:///map")
+@Service("/_map")
 public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
 {
-  @Inject @Lookup("store:///map")
+  @Inject @Lookup("store:///_map")
   private Store<MyHashMap<K,V>> _store;
 
   @Override
@@ -71,7 +71,7 @@ public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
 
     if (index < keys.length) {
       ServiceManager manager = ServiceManager.getCurrent();
-      MapService<K,V> map = manager.lookup("/map/" + keys[index]).as(MapService.class);
+      MapService<K,V> map = manager.lookup("/map-internal/" + keys[index]).as(MapService.class);
 
       int newTotal = total;
 
@@ -92,7 +92,7 @@ public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
     ServiceManager manager = ServiceManager.getCurrent();
 
     for (int i = 0; i < keys.length; i++) {
-      MapService<K,V> map = manager.lookup("/map/" + keys[i]).as(MapService.class);
+      MapService<K,V> map = manager.lookup("/map-internal/" + keys[i]).as(MapService.class);
 
       //map.delete(results[i]);
     }
