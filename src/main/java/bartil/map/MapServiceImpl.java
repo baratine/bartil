@@ -20,14 +20,14 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   private static final Logger log
     = Logger.getLogger(MapServiceImpl.class.getName());
 
-  private Store<MyHashMap<K,V>> _store;
+  private Store<HashMap<K,V>> _store;
 
   private String _id;
   private String _storeKey;
 
-  private MyHashMap<K,V> _map;
+  private HashMap<K,V> _map;
 
-  public MapServiceImpl(String id, String storeKey, Store<MyHashMap<K,V>> store)
+  public MapServiceImpl(String id, String storeKey, Store<HashMap<K,V>> store)
   {
     _id = id;
     _storeKey = storeKey;
@@ -101,7 +101,7 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   @Override
   public void getAll(Result<Map<K,V>> result)
   {
-    MyHashMap<K,V> map = new MyHashMap<K,V>();
+    HashMap<K,V> map = new HashMap<K,V>();
 
     if (_map != null) {
       map.putAll(_map);
@@ -272,7 +272,7 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
     getStore().get(_storeKey, result.from(v->onLoadComplete(v)));
   }
 
-  private boolean onLoadComplete(MyHashMap<K,V> map)
+  private boolean onLoadComplete(HashMap<K,V> map)
   {
     if (map != null) {
       _map = map;
@@ -309,7 +309,7 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
     }
   }
 
-  private Store<MyHashMap<K,V>> getStore()
+  private Store<HashMap<K,V>> getStore()
   {
     return _store;
   }
@@ -317,7 +317,7 @@ public class MapServiceImpl<K,V> implements MapService<K,V>
   private HashMap<K,V> getMap()
   {
     if (_map == null) {
-      _map = new MyHashMap<>();
+      _map = new HashMap<>();
     }
 
     return _map;
