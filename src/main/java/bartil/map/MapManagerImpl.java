@@ -20,7 +20,7 @@ import javax.inject.Inject;
 public class MapManagerImpl<K,V> implements MapManager<K,V>
 {
   @Inject @Lookup("store:///_map")
-  private Store<MyHashMap<K,V>> _store;
+  private Store<HashMap<K,V>> _store;
 
   @Override
   public void exists(K key, Result<Boolean> result)
