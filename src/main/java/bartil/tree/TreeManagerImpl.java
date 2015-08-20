@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 @Journal
 @Service("/_tree")
-public class TreeManagerServiceImpl<K,V> implements TreeManagerService<K,V>
+public class TreeManagerImpl<K,V> implements TreeManager<K,V>
 {
   @Inject @Lookup("store:///_tree")
   private Store<TreeMap<K,V>> _store;

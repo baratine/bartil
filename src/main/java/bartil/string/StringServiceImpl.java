@@ -9,23 +9,21 @@ import io.baratine.core.OnLoad;
 import io.baratine.core.OnSave;
 import io.baratine.core.Result;
 import io.baratine.core.ResultStream;
+import io.baratine.pubsub.PubSubService;
 import io.baratine.store.Store;
 
 public class StringServiceImpl implements StringService
 {
-  private String _id;
-  private String _storeKey;
+  private String _url;
   private Store<String> _store;
 
   private String _value;
 
-  private transient long _watchCount;
-  private transient LinkedHashMap<Long,ResultStream<String>> _watchMap;
+  private transient PubSubService<String> _pubsub;
 
-  public StringServiceImpl(String id, String storeKey, Store<String> store)
+  public StringServiceImpl(String url, Store<String> store)
   {
-    _id = id;
-    _storeKey = storeKey;
+    _url = url;
 
     _store = store;
   }
@@ -55,8 +53,6 @@ public class StringServiceImpl implements StringService
 
     notifyWatchers();
 
-    _watchMap = null;
-
     result.complete(true);
   }
 
@@ -66,94 +62,15 @@ public class StringServiceImpl implements StringService
     result.complete(_value != null);
   }
 
-  @Override
-  public void watch(ResultStream<String> watcher, Result<Long> result)
-  {
-    if (_watchMap == null) {
-      _watchMap = new LinkedHashMap<>();
-    }
-
-    pruneWatchers();
-
-    long id = _watchCount++;
-    _watchMap.put(id, watcher);
-
-    result.complete(id);
-  }
-
-  @Override
-  public void unwatch(long id, Result<Boolean> result)
-  {
-    boolean isSuccessful = false;
-
-    if (_watchMap != null) {
-      ResultStream<String> watcher = _watchMap.remove(id);
-
-      if (watcher != null) {
-        isSuccessful = true;
-      }
-    }
-
-    result.complete(isSuccessful);
-  }
-
   private void notifyWatchers()
   {
-    LinkedList<Long> cancelledList = null;
 
-    if (_watchMap == null) {
-      return;
-    }
-
-    for (Map.Entry<Long,ResultStream<String>> entry : _watchMap.entrySet()) {
-      ResultStream<String> watcher = entry.getValue();
-
-      if (watcher.isCancelled()) {
-        if (cancelledList == null) {
-          cancelledList = new LinkedList<>();
-        }
-
-        cancelledList.add(entry.getKey());
-      }
-      else {
-        watcher.accept(_value);
-      }
-    }
-
-    if (cancelledList != null) {
-      for (Long id : cancelledList) {
-        _watchMap.remove(id);
-      }
-    }
-  }
-
-  private void pruneWatchers()
-  {
-    LinkedList<Long> cancelledList = null;
-
-    for (Map.Entry<Long,ResultStream<String>> entry : _watchMap.entrySet()) {
-      ResultStream<String> watcher = entry.getValue();
-
-      if (watcher.isCancelled()) {
-        if (cancelledList == null) {
-          cancelledList = new LinkedList<>();
-        }
-
-        cancelledList.add(entry.getKey());
-      }
-    }
-
-    if (cancelledList != null) {
-      for (Long id : cancelledList) {
-        _watchMap.remove(id);
-      }
-    }
   }
 
   @OnLoad
   public void onLoad(Result<Boolean> result)
   {
-    _store.get(_storeKey, value -> {
+    _store.get(_url, value -> {
       _value = value;
 
       result.complete(true);
@@ -164,10 +81,10 @@ public class StringServiceImpl implements StringService
   public void onSave(Result<Boolean> result)
   {
     if (_value != null) {
-      _store.put(_storeKey, _value);
+      _store.put(_url, _value);
     }
     else {
-      _store.remove(_storeKey);
+      _store.remove(_url);
     }
 
     result.complete(true);

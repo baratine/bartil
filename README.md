@@ -115,7 +115,76 @@ The directory `baratine-php/` is located in the Baratine distribution directory
 `baratine/modules/`
 
 
-How is Bartil Implemented
+Setting up a Bartil cluster
+===========================
+In Baratine, a virtual cluster is called a pod.  Bartil is hardcoded to use the
+default pod named `pod`.  By default, `pod` is not sharded, which means there
+will only be one node running Bartil at a time.  To change that, we'll need
+to define:
+
+1. a set of servers for the pod
+2. the partitioning scheme
+
+There are 4 different partitioning schemes in Baratine:
+
+1. solo: only 1 instance, requires at least 1 server
+2. pair: 2 instances, requires at least 2 servers
+3. triad: 3 instances, requires at least 3 servers
+4. cluster: N instances, where N is the number of servers in the pod
+
+If you have more servers than required by the scheme, then Baratine will pick
+the required amount and the rest will be backup nodes.
+
+An example configuration file would look like:
+
+pod.cf
+------
+```
+  pod "pod" "cluster" {
+      server id="a" address="127.0.0.1" port="8085";
+      server id="b" address="127.0.0.1" port="8086";
+      server id="c" address="127.0.0.1" port="8087";
+      server id="d" address="127.0.0.1" port="8088";
+  }
+
+```
+
+Now we'll need to start up those servers in the config.  Assuming Baratine is
+not running, we'll need to start up the seed server(s).  Dynamic servers can
+join the cluster anytime by talking to the seed server(s). 
+
+```
+  $ bin/baratine start --seed 127.0.0.1:8085 --seed 127.0.0.1:8086 --port 8085
+  $ bin/baratine start --seed 127.0.0.1:8085 --seed 127.0.0.1:8086 --port 8086
+```
+
+We've just started two seed servers.  Now we'll need to start the dynamic
+servers:
+
+```
+  $ bin/baratine start --seed 127.0.0.1:8085 --seed 127.0.0.1:8086 --port 8087
+  $ bin/baratine start --seed 127.0.0.1:8085 --seed 127.0.0.1:8086 --port 8088
+```
+
+Next, we'll need to upload our `pod.cf`:
+
+```
+  $ bin/baratine put pod.cf bfs:///config/pods/
+```
+
+Baratine watches the bfs:///config/pods directory for changes and reconfigures
+any pods that have updated configuration.
+
+Now deploy Bartil to Baratine:
+
+```
+  $ bin/baratine deploy bartil-0.10-SNAPSHOT.jar
+```
+
+And that's it.  You now have a distributed Bartil application.
+
+
+How is Bartil implemented
 ========================
 Bartil data structures are each a journaled `@Service`:
 

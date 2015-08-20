@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import bartil.string.StringManagerServiceImpl;
+import bartil.string.StringManagerImpl;
 import bartil.string.StringServiceSync;
 
 import com.caucho.junit.ConfigurationBaratine;
@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 @RunWith(RunnerBaratine.class)
-@ConfigurationBaratine(services = {StringManagerServiceImpl.class}, pod = "mypod",
+@ConfigurationBaratine(services = {StringManagerImpl.class}, pod = "mypod",
   logs = {@ConfigurationBaratine.Log(name = "com.caucho", level = "WARNING"),
           @ConfigurationBaratine.Log(name = "examples.cache.string", level = "FINER")})
 public class StringServiceTest
@@ -84,6 +84,7 @@ public class StringServiceTest
     Assert.assertEquals(false, service.exists());
   }
 
+  /*
   @Test
   public void testWatch()
     throws Exception
@@ -113,6 +114,7 @@ public class StringServiceTest
     Assert.assertEquals("ccc", list.get(1));
     Assert.assertEquals("ddd", list.get(2));
   }
+
 
   @Test
   public void testUnwatch()
@@ -147,6 +149,7 @@ public class StringServiceTest
     Assert.assertEquals("bbb", list.get(0));
     Assert.assertEquals("ccc", list.get(1));
   }
+  */
 
   @Test
   public void testLookup()

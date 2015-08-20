@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import bartil.map.MapManagerServiceImpl;
+import bartil.map.MapManagerImpl;
 import bartil.map.MapServiceSync;
 
 import com.caucho.junit.ConfigurationBaratine;
@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 @RunWith(RunnerBaratine.class)
-@ConfigurationBaratine(services = {MapManagerServiceImpl.class}, pod = "mypod",
+@ConfigurationBaratine(services = {MapManagerImpl.class}, pod = "mypod",
   logs = {@ConfigurationBaratine.Log(name = "com.caucho", level = "WARNING"),
           @ConfigurationBaratine.Log(name = "examples.cache.map", level = "FINER")})
 public class MapServiceTest

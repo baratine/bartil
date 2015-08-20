@@ -2,7 +2,7 @@ package bartil.counter;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import bartil.counter.CounterManagerServiceImpl;
+import bartil.counter.CounterManagerImpl;
 import bartil.counter.CounterServiceSync;
 
 import com.caucho.junit.ConfigurationBaratine;
@@ -18,7 +18,7 @@ import org.junit.runner.RunWith;
 import javax.inject.Inject;
 
 @RunWith(RunnerBaratine.class)
-@ConfigurationBaratine(services = {CounterManagerServiceImpl.class}, pod = "mypod",
+@ConfigurationBaratine(services = {CounterManagerImpl.class}, pod = "mypod",
   logs = {@ConfigurationBaratine.Log(name = "com.caucho", level = "WARNING"),
           @ConfigurationBaratine.Log(name = "examples.cache.counter", level = "FINER")})
 public class CounterServiceTest

@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 @Journal
 @Service("/_map")
-public class MapManagerServiceImpl<K,V> implements MapManagerService<K,V>
+public class MapManagerImpl<K,V> implements MapManager<K,V>
 {
   @Inject @Lookup("store:///_map")
   private Store<MyHashMap<K,V>> _store;

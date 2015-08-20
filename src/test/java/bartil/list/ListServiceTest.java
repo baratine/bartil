@@ -14,14 +14,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import bartil.list.ListManagerServiceImpl;
+import bartil.list.ListManagerImpl;
 import bartil.list.ListServiceSync;
 
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;
 
 @RunWith(RunnerBaratine.class)
-@ConfigurationBaratine(services = {ListManagerServiceImpl.class}, pod = "mypod",
+@ConfigurationBaratine(services = {ListManagerImpl.class}, pod = "mypod",
   logs = {@ConfigurationBaratine.Log(name = "com.caucho", level = "WARNING"),
           @ConfigurationBaratine.Log(name = "examples.cache.list", level = "FINER")})
 public class ListServiceTest

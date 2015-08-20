@@ -12,23 +12,23 @@ import io.baratine.core.Service;
 import io.baratine.core.ServiceRef;
 
 @Service("public:///map")
-public class MapServiceFacade<K,V>
+public class MapManagerFacade<K,V>
 {
   @Inject @Lookup("/_map")
   private ServiceRef _service;
 
   @OnLookup
-  public MapServiceFacadeChild<K,V> onLookup(String url)
+  public MapServiceFacade<K,V> onLookup(String url)
   {
     MapService<K,V> map = _service.lookup(url).as(MapService.class);
 
-    return new MapServiceFacadeChild<>(map);
+    return new MapServiceFacade<>(map);
   }
 
-  static class MapServiceFacadeChild<K,V> implements MapService<K,V> {
+  static class MapServiceFacade<K,V> implements MapService<K,V> {
     private MapService<K,V> _map;
 
-    public MapServiceFacadeChild(MapService<K,V> map)
+    public MapServiceFacade(MapService<K,V> map)
     {
       _map = map;
     }

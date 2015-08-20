@@ -11,23 +11,23 @@ import java.util.List;
 import javax.inject.Inject;
 
 @Service("public:///list")
-public class ListServiceFacade<T>
+public class ListManagerFacade<T>
 {
   @Inject @Lookup("/_list")
   private ServiceRef _serviceRef;
 
   @OnLookup
-  public ListServiceFacadeChild<T> onLookup(String url)
+  public ListServiceFacade<T> onLookup(String url)
   {
     ListService<T> list = _serviceRef.lookup(url).as(ListService.class);
 
-    return new ListServiceFacadeChild<>(list);
+    return new ListServiceFacade<>(list);
   }
 
-  static class ListServiceFacadeChild<T> implements ListService<T> {
+  static class ListServiceFacade<T> implements ListService<T> {
     private ListService<T> _list;
 
-    public ListServiceFacadeChild(ListService<T> list)
+    public ListServiceFacade(ListService<T> list)
     {
       _list = list;
     }

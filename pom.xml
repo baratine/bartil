@@ -4,12 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>bartil</groupId>
   <artifactId>bartil</artifactId>
-  <version>0.9-SNAPSHOT</version>
+  <version>0.10-SNAPSHOT</version>
   
   <properties>
-    <baratineVersion>${version}</baratineVersion>
+    <baratineVersion>0.10.0</baratineVersion>
   </properties>
   
+  <!--
   <repositories>
     <repository>
       <id>baratine</id>
@@ -22,6 +23,7 @@
       </snapshots>
     </repository>
   </repositories>
+  -->
   
   <dependencies>
     <dependency>
@@ -44,11 +46,13 @@
       <scope>test</scope>
     </dependency>
     
+    <!--
     <dependency>
       <groupId>com.caucho</groupId>
       <artifactId>hessian</artifactId>
       <version>4.0.38</version>
     </dependency>
+    -->
   </dependencies>
   
   <build>

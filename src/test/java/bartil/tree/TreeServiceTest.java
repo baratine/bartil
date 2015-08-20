@@ -14,19 +14,19 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import bartil.string.StringServiceSync;
-import bartil.tree.TreeManagerServiceImpl;
+import bartil.tree.TreeManagerImpl;
 import bartil.tree.TreeServiceSync;
 
 import com.caucho.junit.ConfigurationBaratine;
 import com.caucho.junit.RunnerBaratine;
 
 @RunWith(RunnerBaratine.class)
-@ConfigurationBaratine(services = {TreeManagerServiceImpl.class}, pod = "mypod",
+@ConfigurationBaratine(services = {TreeManagerImpl.class}, pod = "mypod",
   logs = {@ConfigurationBaratine.Log(name = "com.caucho", level = "WARNING"),
           @ConfigurationBaratine.Log(name = "examples.cache.tree", level = "FINER")})
 public class TreeServiceTest
 {
-  @Inject @Lookup("pod://mypod/tree")
+  @Inject @Lookup("public:///tree")
   private ServiceRef _treeManagerRef;
 
   @Inject
@@ -532,14 +532,14 @@ public class TreeServiceTest
 
     Assert.assertEquals(false, service.exists());
   }
-  
+
   @Test
   public void testLookup()
   {
     String id0 = "foo/bar:" + _count.getAndIncrement();
     TreeServiceSync<String,Integer> service0 = lookup(id0);
     service0.put("aaa", 111);
-    
+
     String id1 = "foo/bar:" + _count.getAndIncrement();
     TreeServiceSync<String,Integer> service1 = lookup(id1);
     service1.put("bbb", 222);

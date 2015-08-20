@@ -9,23 +9,23 @@ import io.baratine.core.Service;
 import io.baratine.core.ServiceRef;
 
 @Service("public:///counter")
-public class CounterServiceFacade
+public class CounterManagerFacade
 {
   @Inject @Lookup("/_counter")
   private ServiceRef _serviceRef;
 
   @OnLookup
-  public CounterServiceFacadeChild onLookup(String url)
+  public CounterService onLookup(String url)
   {
     CounterService counter = _serviceRef.lookup(url).as(CounterService.class);
 
-    return new CounterServiceFacadeChild(counter);
+    return new CounterServiceFacade(counter);
   }
 
-  static class CounterServiceFacadeChild implements CounterService {
+  static class CounterServiceFacade implements CounterService {
     private CounterService _counter;
 
-    public CounterServiceFacadeChild(CounterService counter)
+    public CounterServiceFacade(CounterService counter)
     {
       _counter = counter;
     }

@@ -12,23 +12,23 @@ import io.baratine.core.Service;
 import io.baratine.core.ServiceRef;
 
 @Service("public:///tree")
-public class TreeServiceFacade<K,V>
+public class TreeManagerFacade<K,V>
 {
   @Inject @Lookup("/_tree")
   private ServiceRef _serviceRef;
 
   @OnLookup
-  public TreeServiceFacadeChild<K,V> onLookup(String url)
+  public TreeServiceFacade<K,V> onLookup(String url)
   {
     TreeService<K,V> tree = _serviceRef.lookup(url).as(TreeService.class);
 
-    return new TreeServiceFacadeChild<>(tree);
+    return new TreeServiceFacade<>(tree);
   }
 
-  static class TreeServiceFacadeChild<K,V> implements TreeService<K,V> {
+  static class TreeServiceFacade<K,V> implements TreeService<K,V> {
     private TreeService<K,V> _tree;
 
-    public TreeServiceFacadeChild(TreeService<K,V> tree)
+    public TreeServiceFacade(TreeService<K,V> tree)
     {
       _tree = tree;
     }

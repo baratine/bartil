@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 @Journal
 @Service("/_list")
-public class ListManagerServiceImpl<T> implements ListManagerService
+public class ListManagerImpl<T> implements ListManager
 {
   @Inject @Lookup("store:///_list")
   private Store<LinkedList<T>> _store;

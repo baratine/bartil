@@ -12,8 +12,4 @@ public interface StringService
   void delete(Result<Boolean> result);
 
   void exists(Result<Boolean> result);
-
-  void watch(ResultStream<String> watcher, Result<Long> result);
-
-  void unwatch(long id, Result<Boolean> result);
 }

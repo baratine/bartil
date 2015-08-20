@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 import io.baratine.core.Result;
 
-public interface MapManagerService<K,V>
+public interface MapManager<K,V>
 {
   void exists(K key, Result<Boolean> result);
   void find(Function<K,Boolean> matcher, Result<List<K>> result);

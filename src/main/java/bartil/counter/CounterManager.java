@@ -1,8 +1,8 @@
-package bartil.string;
+package bartil.counter;
 
 import io.baratine.core.Result;
 
-public interface StringManagerService
+public interface CounterManager
 {
   //void delete(Result<Integer> result, String ... keys);
 }
