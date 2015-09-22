@@ -23,9 +23,18 @@ public class StringManagerFacade implements StringManager
   @Inject @Lookup("pod://pod/_string")
   private StringManager _manager;
 
+  public void onLoad(Result<Boolean> result)
+  {
+    System.out.println(getClass().getSimpleName() + ".onLoad0");
+
+    result.complete(true);
+  }
+
   @OnLookup
   public StringService onLookup(String url)
   {
+    System.out.println(getClass().getSimpleName() + ".onLookup0: " + url);
+
     StringService service = _serviceRef.lookup(url).as(StringService.class);
 
     return new StringServiceFacade(service);
