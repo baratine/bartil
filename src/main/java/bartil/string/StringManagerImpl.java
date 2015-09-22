@@ -12,6 +12,7 @@ import io.baratine.core.ResultStream;
 import io.baratine.core.Service;
 import io.baratine.core.ServiceManager;
 import io.baratine.core.ServiceRef;
+import io.baratine.pubsub.PubSubService;
 import io.baratine.store.Store;
 import io.baratine.stream.ResultStreamBuilder;
 
@@ -28,7 +29,12 @@ public class StringManagerImpl implements StringManager
   @OnLookup
   public StringServiceImpl onLookup(String url)
   {
-    StringServiceImpl counter = new StringServiceImpl(url, _store);
+    ServiceManager manager = ServiceManager.getCurrent();
+
+    PubSubService<String> pubsub = manager.lookup("pubsub:///_string" + url)
+                                          .as(PubSubService.class);
+
+    StringServiceImpl counter = new StringServiceImpl(url, _store, pubsub);
 
     return counter;
   }

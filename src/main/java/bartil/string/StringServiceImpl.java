@@ -1,14 +1,9 @@
 package bartil.string;
 
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
-
 import io.baratine.core.Modify;
 import io.baratine.core.OnLoad;
 import io.baratine.core.OnSave;
 import io.baratine.core.Result;
-import io.baratine.core.ResultStream;
 import io.baratine.pubsub.PubSubService;
 import io.baratine.store.Store;
 
@@ -16,16 +11,19 @@ public class StringServiceImpl implements StringService
 {
   private String _url;
   private Store<String> _store;
+  private PubSubService<String> _pubsub;
 
   private String _value;
 
-  private transient PubSubService<String> _pubsub;
-
-  public StringServiceImpl(String url, Store<String> store)
+  public StringServiceImpl(String url,
+                           Store<String> store,
+                           PubSubService<String> pubsub)
   {
     _url = url;
 
     _store = store;
+
+    _pubsub = pubsub;
   }
 
   @Override
@@ -64,13 +62,17 @@ public class StringServiceImpl implements StringService
 
   private void notifyWatchers()
   {
-
+    _pubsub.publish(_value);
   }
 
   @OnLoad
   public void onLoad(Result<Boolean> result)
   {
+    System.out.println(getClass().getSimpleName() + ".onLoad0");
+
     _store.get(_url, value -> {
+      System.out.println(getClass().getSimpleName() + ".onLoad1: " + _url + " . " + value);
+
       _value = value;
 
       result.complete(true);
@@ -80,6 +82,8 @@ public class StringServiceImpl implements StringService
   @OnSave
   public void onSave(Result<Boolean> result)
   {
+    System.out.println(getClass().getSimpleName() + ".onSave0: " + _url + " . " + _value);
+
     if (_value != null) {
       _store.put(_url, _value);
     }

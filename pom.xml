@@ -6,30 +6,11 @@
   <artifactId>bartil</artifactId>
   <version>0.10-SNAPSHOT</version>
   
-  <properties>
-    <baratineVersion>0.10.0</baratineVersion>
-  </properties>
-  
-  <!--
-  <repositories>
-    <repository>
-      <id>baratine</id>
-      <url>http://baratine.io/m2</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <updatePolicy>never</updatePolicy>
-      </snapshots>
-    </repository>
-  </repositories>
-  -->
-  
   <dependencies>
     <dependency>
       <groupId>io.baratine</groupId>
       <artifactId>baratine</artifactId>
-      <version>${baratineVersion}</version>
+      <version>0.10.0</version>
     </dependency>
     
     <dependency>
