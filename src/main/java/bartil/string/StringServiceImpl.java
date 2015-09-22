@@ -72,13 +72,16 @@ public class StringServiceImpl implements StringService
   {
     System.out.println(getClass().getSimpleName() + ".onLoad0");
 
-    _store.get(_url, value -> {
-      System.out.println(getClass().getSimpleName() + ".onLoad1: " + _url + " . " + value);
+    _store.get(_url, result.from(value -> onLoadComplete(value)));
+  }
 
-      _value = value;
+  private boolean onLoadComplete(String value)
+  {
+    System.out.println(getClass().getSimpleName() + ".onLoad1: " + _url + " . " + value);
 
-      result.complete(true);
-    });
+    _value = value;
+
+    return true;
   }
 
   @OnSave
