@@ -62,7 +62,9 @@ public class StringServiceImpl implements StringService
 
   private void notifyWatchers()
   {
-    _pubsub.publish(_value);
+    if (_pubsub != null) {
+      _pubsub.publish(_value);
+    }
   }
 
   @OnLoad

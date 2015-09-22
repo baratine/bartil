@@ -29,10 +29,14 @@ public class StringManagerImpl implements StringManager
   @OnLookup
   public StringServiceImpl onLookup(String url)
   {
+    PubSubService<String> pubsub  = null;
+
+    /*
     ServiceManager manager = ServiceManager.getCurrent();
 
     PubSubService<String> pubsub = manager.lookup("pubsub:///_string" + url)
                                           .as(PubSubService.class);
+    */
 
     StringServiceImpl counter = new StringServiceImpl(url, _store, pubsub);
 
